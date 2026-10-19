@@ -8,12 +8,9 @@ import { Menu, X, MessageCircle } from "lucide-react";
 
 const navigation = [
   { name: "Home", href: "/" },
-  { name: "About", href: "/about" },
-  { name: "Guppies", href: "/varieties" },
-  { name: "Plants", href: "/plants" },
+  { name: "Guppies", href: "/varieties?category=Guppies" },
+  { name: "Bettas", href: "/varieties?category=Bettas" },
   { name: "Gallery", href: "/gallery" },
-  { name: "Journal", href: "/blog" },
-  { name: "Offers", href: "/offers" },
   { name: "Contact", href: "/contact" },
 ];
 
@@ -23,7 +20,7 @@ export default function Header() {
   const pathname = usePathname();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 16);
+    const onScroll = () => setScrolled(window.scrollY > 12);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -51,75 +48,83 @@ export default function Header() {
     closeMenu();
   }, [pathname, closeMenu]);
 
-  const isActive = (href: string) =>
-    href === "/" ? pathname === "/" : pathname.startsWith(href);
+  const isActive = (href: string) => {
+    if (href === "/") return pathname === "/";
+    return pathname.startsWith(href.split("?")[0]);
+  };
 
   return (
     <header
-      className={`sticky top-0 z-50 transition-all duration-500 ease-luxe ${
-        scrolled
-          ? "border-b border-gold/15 bg-obsidian/85 backdrop-blur-md"
-          : "border-b border-transparent bg-transparent"
+      className={`sticky top-0 z-50 transition-all duration-200 border-b border-border ${
+        scrolled ? "bg-white/95 backdrop-blur-md shadow-sm" : "bg-white"
       }`}
     >
       <nav
-        className="mx-auto flex h-16 max-w-site items-center justify-between px-4 sm:px-6 lg:h-[72px] lg:px-10"
+        className="mx-auto flex h-16 max-w-site items-center justify-between px-4 sm:px-6 lg:h-[68px] lg:px-10"
         aria-label="Primary"
       >
-        {/* Brand */}
-        <Link href="/" className="flex items-center gap-3" onClick={closeMenu}>
-          <span className="sr-only">Sheferoy Guppy — home</span>
-          <Image
-            src="/logo.png"
-            alt=""
-            width={140}
-            height={70}
-            className="h-10 w-auto object-contain lg:h-11"
-            priority
-          />
+        {/* Brand Logo & Name */}
+        <Link href="/" className="flex items-center gap-3 group" onClick={closeMenu}>
+          <div className="relative h-10 w-10 overflow-hidden rounded-xl border border-border bg-white shadow-subtle p-0.5 transition-transform duration-200 group-hover:scale-105">
+            <Image
+              src="/logo.png"
+              alt="Sheferoy Guppy"
+              fill
+              className="object-contain"
+              priority
+            />
+          </div>
+          <div className="flex flex-col">
+            <span className="font-display text-base font-bold tracking-tight text-charcoal sm:text-lg leading-tight transition-colors group-hover:text-brand">
+              Sheferoy Guppy
+            </span>
+            <span className="font-sans text-[10px] font-semibold uppercase tracking-wider text-muted leading-tight">
+              Ornamental Guppies & Bettas
+            </span>
+          </div>
         </Link>
 
-        {/* Desktop nav */}
-        <div className="hidden items-center gap-7 lg:flex xl:gap-9">
-          {navigation.map((item) => (
-            <Link
-              key={item.name}
-              href={item.href}
-              aria-current={isActive(item.href) ? "page" : undefined}
-              className={`group relative py-2 font-sans text-[11px] font-semibold uppercase tracking-[0.2em] transition-colors ${
-                isActive(item.href) ? "text-gold-light" : "text-ivory/75 hover:text-ivory"
-              }`}
-            >
-              {item.name}
-              <span
-                className={`absolute inset-x-0 -bottom-0.5 h-px origin-left bg-gradient-to-r from-gold to-transparent transition-transform duration-400 ease-luxe ${
-                  isActive(item.href) ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+        {/* Desktop Nav Links */}
+        <div className="hidden items-center gap-6 md:flex lg:gap-8">
+          {navigation.map((item) => {
+            const active = isActive(item.href);
+            return (
+              <Link
+                key={item.name}
+                href={item.href}
+                aria-current={active ? "page" : undefined}
+                className={`text-xs font-semibold uppercase tracking-wider transition-colors duration-150 ${
+                  active ? "text-brand font-bold" : "text-body hover:text-brand"
                 }`}
-                aria-hidden="true"
-              />
-            </Link>
-          ))}
+              >
+                {item.name}
+              </Link>
+            );
+          })}
         </div>
 
         {/* Desktop CTA */}
-        <Link
-          href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || ""}?text=${encodeURIComponent(
-            "Hi, I'm interested in your guppy varieties"
-          )}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="btn hidden border border-gold/60 px-5 py-2.5 text-gold-light transition-all hover:bg-gold hover:text-obsidian lg:inline-flex"
-        >
-          <MessageCircle className="h-3.5 w-3.5" aria-hidden="true" />
-          Enquire
-        </Link>
+        <div className="hidden items-center gap-3 md:flex">
+          <Link
+            href={`https://wa.me/919489184047?text=${encodeURIComponent(
+              "Hi Sheferoy Guppy, I am interested in your ornamental guppies and bettas."
+            )}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-primary py-2 px-5 text-xs shadow-teal"
+            aria-label="Contact Sheferoy Guppy on WhatsApp"
+          >
+            <MessageCircle className="h-3.5 w-3.5" aria-hidden="true" />
+            WhatsApp
+          </Link>
+        </div>
 
-        {/* Mobile toggle */}
+        {/* Mobile menu toggle */}
         <button
           type="button"
-          className="-mr-2 inline-flex items-center justify-center rounded-md p-2.5 text-ivory transition-colors hover:text-gold lg:hidden"
+          className="inline-flex items-center justify-center rounded-xl border border-border bg-white p-2 text-charcoal shadow-subtle transition-colors hover:border-brand hover:text-brand md:hidden"
           onClick={() => setMobileMenuOpen(true)}
-          aria-label="Open menu"
+          aria-label="Open navigation menu"
           aria-expanded={mobileMenuOpen}
           aria-controls="mobile-menu"
         >
@@ -127,65 +132,79 @@ export default function Header() {
         </button>
       </nav>
 
-      {/* Mobile menu */}
+      {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div id="mobile-menu" role="dialog" aria-modal="true" aria-label="Menu" className="lg:hidden">
+        <div id="mobile-menu" role="dialog" aria-modal="true" aria-label="Navigation Menu" className="md:hidden">
           <div
-            className="fixed inset-0 z-50 bg-obsidian/70 backdrop-blur-sm"
+            className="fixed inset-0 z-50 bg-charcoal/30 backdrop-blur-sm transition-opacity"
             onClick={closeMenu}
             aria-hidden="true"
           />
-          <div className="fixed inset-y-0 right-0 z-50 flex w-full max-w-sm flex-col overflow-y-auto border-l border-gold/15 bg-obsidian px-6 pb-10 pt-5">
-            <div className="flex items-center justify-between">
-              <Image src="/logo.png" alt="Sheferoy Guppy" width={120} height={60} className="h-9 w-auto object-contain" />
+          <div className="fixed inset-y-0 right-0 z-50 flex w-full max-w-xs flex-col overflow-y-auto border-l border-border bg-white p-6 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-border pb-4">
+              <div className="flex items-center gap-2.5">
+                <div className="relative h-9 w-9 overflow-hidden rounded-lg border border-border p-0.5">
+                  <Image src="/logo.png" alt="Sheferoy Guppy" fill className="object-contain" />
+                </div>
+                <div className="flex flex-col">
+                  <span className="font-display text-sm font-bold text-charcoal">Sheferoy Guppy</span>
+                  <span className="text-[10px] uppercase tracking-wider text-muted">Ornamental Fish</span>
+                </div>
+              </div>
               <button
                 type="button"
-                className="-mr-2 rounded-md p-2.5 text-ivory transition-colors hover:text-gold"
+                className="rounded-xl border border-border bg-white p-2 text-body hover:text-charcoal shadow-subtle"
                 onClick={closeMenu}
                 aria-label="Close menu"
                 autoFocus
               >
-                <X className="h-5 w-5" aria-hidden="true" />
+                <X className="h-4 w-4" />
               </button>
             </div>
 
-            <div className="mt-10 flex flex-1 flex-col">
+            <div className="mt-6 flex flex-1 flex-col justify-between">
               <ul className="space-y-1">
-                {navigation.map((item, i) => (
-                  <li key={item.name} className="anim-rise" style={{ animationDelay: `${i * 0.05}s` }}>
-                    <Link
-                      href={item.href}
-                      onClick={closeMenu}
-                      aria-current={isActive(item.href) ? "page" : undefined}
-                      className={`flex items-baseline justify-between border-b border-white/5 py-3.5 font-display text-2xl transition-colors ${
-                        isActive(item.href) ? "text-gold-light" : "text-ivory hover:text-gold-light"
-                      }`}
-                    >
-                      {item.name}
-                      <span className="font-sans text-[10px] uppercase tracking-[0.25em] text-ivory/30">
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                    </Link>
-                  </li>
-                ))}
+                {navigation.map((item) => {
+                  const active = isActive(item.href);
+                  return (
+                    <li key={item.name}>
+                      <Link
+                        href={item.href}
+                        onClick={closeMenu}
+                        aria-current={active ? "page" : undefined}
+                        className={`flex items-center justify-between rounded-xl px-4 py-2.5 text-sm font-semibold transition-all ${
+                          active
+                            ? "bg-brand text-white shadow-teal"
+                            : "text-charcoal hover:bg-secondary hover:text-brand"
+                        }`}
+                      >
+                        {item.name}
+                      </Link>
+                    </li>
+                  );
+                })}
               </ul>
 
-              <div className="mt-auto pt-10">
+              <div className="mt-8 border-t border-border pt-6 space-y-3">
                 <Link
-                  href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || ""}?text=${encodeURIComponent(
-                    "Hi, I'm interested in your guppy varieties"
+                  href={`https://wa.me/919489184047?text=${encodeURIComponent(
+                    "Hi Sheferoy Guppy, I am interested in your ornamental guppies and bettas."
                   )}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn-gold w-full"
+                  className="btn-primary w-full justify-center py-2.5 text-xs"
                   onClick={closeMenu}
                 >
                   <MessageCircle className="h-4 w-4" aria-hidden="true" />
-                  Enquire on WhatsApp
+                  WhatsApp
                 </Link>
-                <p className="mt-4 text-center font-sans text-[10px] uppercase tracking-[0.22em] text-ivory/40">
-                  Kanyakumari · Tamil Nadu · India
-                </p>
+                <a
+                  href="tel:7358612156"
+                  className="btn-secondary w-full justify-center py-2.5 text-xs"
+                  onClick={closeMenu}
+                >
+                  Call: 7358612156
+                </a>
               </div>
             </div>
           </div>

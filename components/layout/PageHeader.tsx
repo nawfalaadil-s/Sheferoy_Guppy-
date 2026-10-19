@@ -5,28 +5,47 @@ interface PageHeaderProps {
   title: ReactNode;
   description?: string;
   children?: ReactNode;
-  tone?: "gold" | "moss";
+  tone?: "cyan" | "emerald" | "gold";
 }
 
-export default function PageHeader({ eyebrow, title, description, children, tone = "gold" }: PageHeaderProps) {
-  const accent = tone === "moss" ? "text-moss-light" : "text-gold";
+export default function PageHeader({ eyebrow, title, description, children, tone = "cyan" }: PageHeaderProps) {
+  const accent =
+    tone === "emerald"
+      ? "text-success"
+      : tone === "gold"
+      ? "text-gold"
+      : "text-brand";
+
+  const dotBg =
+    tone === "emerald"
+      ? "bg-success"
+      : tone === "gold"
+      ? "bg-gold"
+      : "bg-brand";
+
   return (
-    <section className="grain relative overflow-hidden border-b border-white/5 bg-gradient-to-b from-[#0d1214] to-obsidian pb-14 pt-16 lg:pb-20 lg:pt-24">
+    <section className="relative overflow-hidden border-b border-border bg-gradient-to-b from-secondary/70 via-secondary/30 to-page pb-12 pt-14 lg:pb-16 lg:pt-16">
       <div
-        className={`absolute left-1/4 top-0 h-[380px] w-[640px] -translate-x-1/2 rounded-full ${
-          tone === "moss"
-            ? "bg-[radial-gradient(closest-side,rgba(95,158,110,0.12),transparent)]"
-            : "bg-[radial-gradient(closest-side,rgba(199,164,90,0.12),transparent)]"
-        }`}
+        className="pointer-events-none absolute right-10 top-0 h-64 w-64 rounded-full bg-gold/10 blur-3xl"
+        aria-hidden="true"
+      />
+      <div
+        className="pointer-events-none absolute left-10 top-1/2 h-64 w-64 -translate-y-1/2 rounded-full bg-brand/5 blur-3xl"
         aria-hidden="true"
       />
       <div className="relative mx-auto max-w-site px-4 sm:px-6 lg:px-10">
-        <p className={`flex items-center gap-3 font-sans text-[11px] font-semibold uppercase tracking-editorial ${accent}`}>
-          <span className={`inline-block h-px w-8 ${tone === "moss" ? "bg-moss-light/60" : "bg-gold/70"}`} aria-hidden="true" />
+        <p className={`flex items-center gap-2.5 font-sans text-xs font-semibold uppercase tracking-wider ${accent}`}>
+          <span className={`inline-block h-2 w-2 rounded-full ${dotBg} animate-pulse`} aria-hidden="true" />
           {eyebrow}
         </p>
-        <h1 className="display-1 mt-5 max-w-3xl text-ivory">{title}</h1>
-        {description && <p className="lede mt-5 max-w-2xl">{description}</p>}
+        <h1 className="mt-4 max-w-3xl font-display text-3xl font-bold tracking-tight text-heading sm:text-4xl lg:text-5xl">
+          {title}
+        </h1>
+        {description && (
+          <p className="mt-4 max-w-2xl text-base leading-relaxed text-body sm:text-lg">
+            {description}
+          </p>
+        )}
         {children}
       </div>
     </section>

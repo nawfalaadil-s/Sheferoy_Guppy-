@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import PageHeader from "@/components/layout/PageHeader";
 
 export const metadata: Metadata = {
-  title: "Terms of Service",
+  title: "Terms of Service | Sheferoy Guppy",
   description: "Terms of Service for Sheferoy Guppy. Read our terms and conditions for using our services.",
   alternates: { canonical: "/terms" },
 };
@@ -10,23 +10,23 @@ export const metadata: Metadata = {
 const sections = [
   {
     heading: "Agreement to Terms",
-    body: "By accessing our website and services, you agree to these Terms of Service. If you disagree with any part of these terms, please do not use our services.",
+    body: "By accessing our website and contacting our hatchery, you agree to these Terms of Service. If you disagree with any part of these terms, please do not use our services.",
   },
   {
-    heading: "Services",
-    body: "Sheferoy Guppy provides information about ornamental guppy varieties and facilitates enquiries for purchase. We do not operate an online shopping cart or payment processing system.",
+    heading: "Services & Reservations",
+    body: "Sheferoy Guppy provides information regarding our ornamental guppy bloodlines, bettas, and aquatic botanicals, facilitating direct customer consultations and enquiries. Reservations are confirmed individually with live video previews.",
   },
   {
     heading: "Shipping and Availability",
-    body: "All guppy availability is subject to change. Shipping terms, delivery timelines, and packaging methods will be communicated directly during the enquiry process.",
+    body: "All fish and plant availability is subject to seasonal spawning and conditioning cycles. Shipping schedules, packaging methods, and transit timelines will be communicated directly during the reservation process.",
   },
   {
-    heading: "Live Fish Disclaimer",
-    body: "We take great care in packaging and shipping live fish. However, we are not responsible for issues arising from delays, improper handling by courier services, or conditions beyond our control. Specific terms will be discussed for each order.",
+    heading: "100% Live Arrival Guarantee",
+    body: "We pack all livestock in specialized breathable or oxygenated bags with thermal insulation. In the rare event of transit mortality, we provide full replacement or credit upon receiving clear unboxing photographs/video within 2 hours of delivery.",
   },
   {
     heading: "Intellectual Property",
-    body: "All content on this website, including text, images, logos, and design, is the property of Sheferoy Guppy and is protected by copyright laws. Unauthorized use is prohibited.",
+    body: "All original content on this website, including photographs, videos, textual guides, and brand trademarks, is the intellectual property of Sheferoy Guppy. Unauthorized reproduction is strictly prohibited.",
   },
 ];
 
@@ -36,28 +36,28 @@ export default function TermsPage() {
       <PageHeader
         eyebrow="Legal"
         title="Terms of Service"
-        description="The basis on which Sheferoy Guppy shares information about its collection and handles enquiries."
+        description="The basis on which Sheferoy Guppy shares information about its collection and coordinates reservations."
       />
 
-      <section className="bg-obsidian pb-24 pt-12">
+      <section className="bg-page pb-24 pt-12">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-10">
-          <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-ivory/45">
-            Last updated: October 18, 2026
+          <p className="font-sans text-xs font-semibold uppercase tracking-wider text-muted">
+            Last updated: October 2026
           </p>
 
           <div className="mt-10 space-y-10">
             {sections.map((section) => (
               <div key={section.heading}>
-                <h2 className="font-display text-2xl text-ivory">{section.heading}</h2>
-                <p className="mt-4 text-base leading-relaxed text-mist">{section.body}</p>
+                <h2 className="font-display text-2xl font-bold text-heading">{section.heading}</h2>
+                <p className="mt-3 text-base leading-relaxed text-body">{section.body}</p>
               </div>
             ))}
 
-            <div className="rounded-2xl border border-gold/15 bg-abyss p-6">
-              <h2 className="font-display text-2xl text-ivory">Contact Information</h2>
-              <p className="mt-3 text-sm leading-relaxed text-mist">
-                For questions about these Terms of Service, please contact us through our contact page or
-                WhatsApp.
+            <div className="rounded-2xl border border-border bg-surface p-6 shadow-sm">
+              <h2 className="font-display text-xl font-bold text-heading">Contact Information</h2>
+              <p className="mt-2 text-sm leading-relaxed text-body">
+                For questions about these Terms of Service, please reach out to our team through our contact page or directly
+                via WhatsApp.
               </p>
             </div>
           </div>

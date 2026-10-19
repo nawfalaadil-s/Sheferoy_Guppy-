@@ -1,17 +1,18 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import PageHeader from "@/components/layout/PageHeader";
 import VarietiesClient from "@/components/varieties/VarietiesClient";
 
 export const metadata: Metadata = {
-  title: "Guppy Varieties — 65+ Ornamental Bloodlines",
+  title: "Ornamental Guppies & Bettas — Pure Bloodlines | Sheferoy Guppy",
   description:
-    "Explore 65+ premium guppy varieties from Sheferoy Guppy, Kanyakumari, Tamil Nadu. Browse solid colors, patterns, metallic strains, and unique tail lines with safe pan-India shipping.",
-  keywords: ["guppy varieties", "ornamental guppies", "guppy strains", "guppy breeder Tamil Nadu", "aquarium fish India"],
+    "Explore premium ornamental guppies, bettas, and breeding pairs from Sheferoy Guppy, Kanyakumari, Tamil Nadu.",
+  keywords: ["guppy varieties", "ornamental guppies", "bettas India", "Sheferoy Guppy", "guppy breeder Tamil Nadu", "aquarium fish India"],
   alternates: { canonical: "/varieties" },
   openGraph: {
-    title: "Guppy Varieties | Sheferoy Guppy",
+    title: "Guppy Varieties & Bettas | Sheferoy Guppy",
     description:
-      "Explore 65+ premium guppy varieties from Sheferoy Guppy — solid colors, patterns, metallic strains and tail lines.",
+      "Explore premium ornamental guppies, bettas, and breeding pairs from Sheferoy Guppy.",
     url: "/varieties",
   },
 };
@@ -23,13 +24,22 @@ export default function VarietiesPage() {
         eyebrow="The Collection"
         title={
           <>
-            Sixty-Five Varieties.{" "}
-            <span className="font-display italic text-gold-light">One Standard.</span>
+            Ornamental Strains.{" "}
+            <span className="font-display italic text-brand">Exceptional Purity.</span>
           </>
         }
         description="Every line in the collection is raised in Kanyakumari and selected for colour depth, finnage and vigour. Explore the catalogue, then enquire about the lines that speak to you."
       />
-      <VarietiesClient />
+      <Suspense
+        fallback={
+          <div className="container-custom py-16 text-center text-body">
+            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-brand border-r-transparent align-[-0.125em]" />
+            <p className="mt-4 text-sm font-medium">Loading collection...</p>
+          </div>
+        }
+      >
+        <VarietiesClient />
+      </Suspense>
     </>
   );
 }

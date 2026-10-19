@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { Search, X } from "lucide-react";
-import PlantArt from "@/components/art/PlantArt";
 import WhatsAppButton from "@/components/ui/WhatsAppButton";
 import { plants } from "@/lib/plants-data";
 
@@ -27,18 +27,19 @@ export default function PlantsClient() {
 
   return (
     <>
-      <div className="border-b border-moss/15 bg-obsidian">
+      {/* Search & Counter Bar */}
+      <div className="border-b border-border bg-page">
         <div className="mx-auto max-w-site px-4 py-5 sm:px-6 lg:px-10">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="relative w-full max-w-sm">
               <label htmlFor="plant-search" className="sr-only">
                 Search plants
               </label>
-              <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ivory/40" aria-hidden="true" />
+              <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" aria-hidden="true" />
               <input
                 type="search"
                 id="plant-search"
-                className="w-full rounded-full border border-white/10 bg-white/[0.04] py-2.5 pl-10 pr-10 text-sm text-ivory placeholder:text-ivory/35 transition-colors focus:border-moss-light/60 focus:outline-none focus:ring-2 focus:ring-moss/25"
+                className="w-full rounded-xl border border-border bg-surface py-2.5 pl-10 pr-10 text-sm text-heading placeholder:text-muted transition-colors focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/10 shadow-sm"
                 placeholder="Search plants…"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -47,32 +48,32 @@ export default function PlantsClient() {
                 <button
                   type="button"
                   onClick={() => setSearchQuery("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-ivory/40 transition-colors hover:text-ivory"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-muted transition-colors hover:text-heading"
                   aria-label="Clear search"
                 >
                   <X className="h-3.5 w-3.5" aria-hidden="true" />
                 </button>
               )}
             </div>
-            <p className="font-sans text-[11px] uppercase tracking-[0.2em] text-ivory/45" role="status">
+            <p className="font-sans text-xs uppercase tracking-wider text-muted" role="status">
               {filteredPlants.length} {filteredPlants.length === 1 ? "plant" : "plants"} in the botanical collection
             </p>
           </div>
         </div>
       </div>
 
-      <div className="bg-obsidian pb-24 pt-12">
+      <div className="bg-page pb-24 pt-10">
         <div className="mx-auto max-w-site px-4 sm:px-6 lg:px-10">
           {filteredPlants.length === 0 ? (
-            <div className="rounded-3xl border border-moss/20 bg-[#0d1613] px-8 py-20 text-center">
-              <p className="font-display text-3xl text-ivory">No plants match that search.</p>
-              <p className="mx-auto mt-3 max-w-sm text-sm text-mist">
+            <div className="rounded-3xl border border-border bg-surface px-8 py-20 text-center shadow-card">
+              <p className="font-display text-2xl font-bold text-heading">No plants match that search.</p>
+              <p className="mx-auto mt-2 max-w-sm text-sm text-body">
                 Try another name, or clear the search to see the whole collection.
               </p>
               <button
                 type="button"
                 onClick={() => setSearchQuery("")}
-                className="btn-moss mt-8"
+                className="mt-6 inline-flex items-center justify-center rounded-xl bg-brand px-6 py-2.5 text-xs font-semibold uppercase tracking-wider text-white hover:bg-brand-hover shadow-sm transition-all"
               >
                 Clear search
               </button>
@@ -82,37 +83,35 @@ export default function PlantsClient() {
               {filteredPlants.map((plant) => (
                 <article
                   key={plant.id}
-                  className="group relative flex flex-col overflow-hidden rounded-2xl border border-moss/20 bg-[#0d1613]/80 transition-all duration-500 ease-luxe hover:border-moss-light/45 hover:bg-[#101b17] hover:shadow-[0_30px_60px_-30px_rgba(95,158,110,0.35)]"
+                  className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-surface shadow-card hover:shadow-card-hover transition-all duration-300"
                 >
-                  <div className="relative overflow-hidden">
-                    <div
-                      className="absolute inset-0 bg-[radial-gradient(75%_75%_at_50%_45%,rgba(95,158,110,0.16)_0%,rgba(9,11,13,0)_70%)]"
-                      aria-hidden="true"
-                    />
-                    <PlantArt
-                      type={plant.art}
-                      className="relative left-1/2 h-auto w-[60%] -translate-x-1/2 transition-transform duration-700 ease-luxe group-hover:scale-[1.05]"
+                  <div className="relative aspect-[4/3] w-full overflow-hidden bg-secondary">
+                    <Image
+                      src={plant.image}
+                      alt={plant.name}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     />
                   </div>
 
-                  <div className="flex flex-1 flex-col px-6 pb-6">
-                    <h2 className="font-display text-2xl text-ivory">
-                      <Link href={`/plants/${plant.slug}`} className="transition-colors hover:text-moss-light">
-                        <span className="absolute inset-0" aria-hidden="true" />
+                  <div className="flex flex-1 flex-col p-6">
+                    <h2 className="font-display text-xl font-bold text-heading group-hover:text-brand transition-colors">
+                      <Link href={`/plants/${plant.slug}`}>
                         {plant.name}
                       </Link>
                     </h2>
                     {plant.scientificName && (
-                      <p className="mt-0.5 font-display text-sm italic text-moss-light/70">{plant.scientificName}</p>
+                      <p className="mt-1 text-xs italic text-brand/80">{plant.scientificName}</p>
                     )}
-                    <p className="mt-3 line-clamp-2 flex-1 text-sm leading-relaxed text-mist">
+                    <p className="mt-3 line-clamp-2 flex-1 text-sm leading-relaxed text-body">
                       {plant.shortDescription}
                     </p>
-                    <div className="mt-5 flex items-center justify-between border-t border-white/5 pt-4">
-                      <span className="font-sans text-[10px] font-semibold uppercase tracking-[0.18em] text-moss-light/75">
+                    <div className="mt-5 flex items-center justify-between border-t border-border pt-4">
+                      <span className="rounded-full border border-border bg-secondary px-3 py-1 font-sans text-[11px] font-semibold uppercase tracking-wider text-brand">
                         {plant.careInformation?.difficulty.split("—")[0].trim() ?? "Live plant"}
                       </span>
-                      <WhatsAppButton variety={plant.name} variant="link" className="relative z-10 text-moss-light hover:text-moss-light/80">
+                      <WhatsAppButton variety={plant.name} variant="link" className="text-xs font-semibold uppercase tracking-wider text-brand hover:text-brand-hover hover:underline">
                         Enquire
                       </WhatsAppButton>
                     </div>

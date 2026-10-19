@@ -211,12 +211,13 @@ export default function AdminReelsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-obsidian pb-24">
+    <div className="min-h-screen bg-page pb-24">
       <PageHeader
         eyebrow="Administrator Console"
+        tone="gold"
         title={
           <>
-            Instagram Reel <span className="font-display italic text-gold-light">Management</span>
+            Instagram Reel <span className="font-display italic text-brand">Management</span>
           </>
         }
         description="Add, edit, reorder, feature, and remove Instagram Reels displayed across the Sheferoy Guppy website."
@@ -227,17 +228,17 @@ export default function AdminReelsPage() {
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-gold transition-colors hover:text-gold-light"
+            className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-brand transition-colors hover:text-brand-hover font-sans"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to Homepage
           </Link>
 
           <div className="flex items-center gap-3">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-ivory/70">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface px-3 py-1 text-xs text-body shadow-sm">
               <span
                 className={`h-2 w-2 rounded-full ${
-                  source === "official_api" ? "bg-green-400" : "bg-gold"
+                  source === "official_api" ? "bg-success" : "bg-gold"
                 }`}
               />
               Mode: {source === "official_api" ? "Meta Graph API Active" : "Admin-Managed List"}
@@ -246,7 +247,7 @@ export default function AdminReelsPage() {
             <button
               type="button"
               onClick={handleReset}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 px-3 py-1.5 text-xs text-ivory/60 transition-colors hover:border-gold hover:text-gold"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-surface px-3 py-1.5 text-xs text-body transition-colors hover:border-brand hover:text-brand shadow-sm"
             >
               <RotateCcw className="h-3.5 w-3.5" />
               Reset Defaults
@@ -255,15 +256,15 @@ export default function AdminReelsPage() {
         </div>
 
         {/* Integration notice */}
-        <div className="mb-10 flex items-start gap-3 rounded-2xl border border-gold/20 bg-abyss/80 p-5 backdrop-blur-sm">
-          <Info className="mt-0.5 h-5 w-5 shrink-0 text-gold" />
-          <div className="text-xs leading-relaxed text-ivory/80 space-y-1">
-            <p className="font-semibold text-gold-light">
+        <div className="mb-10 flex items-start gap-3 rounded-2xl border border-border bg-secondary/70 p-5">
+          <Info className="mt-0.5 h-5 w-5 shrink-0 text-brand" />
+          <div className="text-xs leading-relaxed text-body space-y-1">
+            <p className="font-semibold text-heading">
               Official Instagram Integration Notice:
             </p>
             <p>
               This website links exclusively to verified content published by{" "}
-              <strong>@sheferoyguppy</strong> (Kanyakumari, Tamil Nadu). If an official Instagram
+              <strong className="text-heading">@sheferoyguppy</strong> (Kanyakumari, Tamil Nadu). If an official Instagram
               Graph API Access Token is provided in the environment (<code>INSTAGRAM_ACCESS_TOKEN</code>
               ), the system automatically syncs with the Meta API. In standard operation, this
               admin-managed list maintains and validates official Reel links.
@@ -274,16 +275,16 @@ export default function AdminReelsPage() {
         {/* Action feedback */}
         {feedback && (
           <div
-            className={`mb-6 flex items-center gap-2 rounded-xl border p-4 text-xs ${
+            className={`mb-6 flex items-center gap-2 rounded-xl border p-4 text-xs font-medium ${
               feedback.type === "success"
-                ? "border-green-500/30 bg-green-950/40 text-green-300"
-                : "border-red-500/30 bg-red-950/40 text-red-300"
+                ? "border-success/30 bg-success/10 text-success"
+                : "border-error/30 bg-error/10 text-error"
             }`}
           >
             {feedback.type === "success" ? (
-              <CheckCircle2 className="h-4 w-4 shrink-0 text-green-400" />
+              <CheckCircle2 className="h-4 w-4 shrink-0 text-success" />
             ) : (
-              <AlertCircle className="h-4 w-4 shrink-0 text-red-400" />
+              <AlertCircle className="h-4 w-4 shrink-0 text-error" />
             )}
             <span>{feedback.text}</span>
           </div>
@@ -292,15 +293,17 @@ export default function AdminReelsPage() {
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-12">
           {/* Add Reel Form */}
           <div className="lg:col-span-5">
-            <div className="sticky top-24 rounded-3xl border border-gold/20 bg-abyss p-6 shadow-xl">
+            <div className="sticky top-24 rounded-3xl border border-border bg-surface p-6 sm:p-7 shadow-card">
               <div className="mb-5 flex items-center gap-2.5">
-                <Plus className="h-5 w-5 text-gold" />
-                <h3 className="font-display text-lg text-ivory">Add New Instagram Reel</h3>
+                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-secondary text-brand">
+                  <Plus className="h-4 w-4" />
+                </span>
+                <h3 className="font-display text-lg font-bold text-heading">Add New Instagram Reel</h3>
               </div>
 
               <form onSubmit={handleAdd} className="space-y-4">
                 <div>
-                  <label htmlFor="url" className="mb-1 block text-xs font-semibold uppercase tracking-wider text-ivory/80">
+                  <label htmlFor="url" className="mb-1 block text-xs font-semibold uppercase tracking-wider text-heading">
                     Instagram Reel URL <span className="text-gold">*</span>
                   </label>
                   <input
@@ -309,13 +312,13 @@ export default function AdminReelsPage() {
                     value={url}
                     onChange={(e) => setUrl(e.target.value)}
                     placeholder="https://www.instagram.com/reel/DRmaGfQCZES/"
-                    className="field text-sm"
+                    className="w-full rounded-xl border border-border bg-page px-3.5 py-2.5 text-sm text-heading placeholder:text-muted focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/10 shadow-sm"
                     required
                   />
                   {urlInfo && (
                     <p
-                      className={`mt-1.5 flex items-center gap-1.5 text-xs ${
-                        urlInfo.valid ? "text-green-400" : "text-red-400"
+                      className={`mt-1.5 flex items-center gap-1.5 text-xs font-medium ${
+                        urlInfo.valid ? "text-success" : "text-error"
                       }`}
                     >
                       {urlInfo.valid ? (
@@ -329,7 +332,7 @@ export default function AdminReelsPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="caption" className="mb-1 block text-xs font-semibold uppercase tracking-wider text-ivory/80">
+                  <label htmlFor="caption" className="mb-1 block text-xs font-semibold uppercase tracking-wider text-heading">
                     Caption / Description <span className="text-gold">*</span>
                   </label>
                   <textarea
@@ -338,26 +341,26 @@ export default function AdminReelsPage() {
                     value={caption}
                     onChange={(e) => setCaption(e.target.value)}
                     placeholder="Describe the bloodline, feeding session, or breeding update shown in this video…"
-                    className="field text-sm"
+                    className="w-full rounded-xl border border-border bg-page px-3.5 py-2.5 text-sm text-heading placeholder:text-muted focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/10 shadow-sm resize-none"
                     required
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label htmlFor="category" className="mb-1 block text-xs font-semibold uppercase tracking-wider text-ivory/80">
+                    <label htmlFor="category" className="mb-1 block text-xs font-semibold uppercase tracking-wider text-heading">
                       Category
                     </label>
                     <select
                       id="category"
                       value={category}
                       onChange={(e) => setCategory(e.target.value as ReelItemCategory)}
-                      className="field text-sm text-ivory"
+                      className="w-full rounded-xl border border-border bg-page px-3 py-2.5 text-sm text-heading focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/10 shadow-sm"
                     >
                       {reelCategories
                         .filter((c) => c !== "All")
                         .map((cat) => (
-                          <option key={cat} value={cat} className="bg-abyss text-ivory">
+                          <option key={cat} value={cat}>
                             {cat}
                           </option>
                         ))}
@@ -365,7 +368,7 @@ export default function AdminReelsPage() {
                   </div>
 
                   <div>
-                    <label htmlFor="variety" className="mb-1 block text-xs font-semibold uppercase tracking-wider text-ivory/80">
+                    <label htmlFor="variety" className="mb-1 block text-xs font-semibold uppercase tracking-wider text-heading">
                       Variety Tag
                     </label>
                     <input
@@ -374,7 +377,7 @@ export default function AdminReelsPage() {
                       value={variety}
                       onChange={(e) => setVariety(e.target.value)}
                       placeholder="e.g. Platinum Koi"
-                      className="field text-sm"
+                      className="w-full rounded-xl border border-border bg-page px-3.5 py-2.5 text-sm text-heading placeholder:text-muted focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/10 shadow-sm"
                     />
                   </div>
                 </div>
@@ -385,9 +388,9 @@ export default function AdminReelsPage() {
                     id="featured"
                     checked={featured}
                     onChange={(e) => setFeatured(e.target.checked)}
-                    className="h-4 w-4 rounded border-gold/40 bg-white/10 text-gold focus:ring-gold"
+                    className="h-4 w-4 rounded border-border text-brand focus:ring-brand"
                   />
-                  <label htmlFor="featured" className="text-xs text-ivory/80">
+                  <label htmlFor="featured" className="text-xs text-body font-medium">
                     Feature on Homepage Showcase
                   </label>
                 </div>
@@ -395,7 +398,7 @@ export default function AdminReelsPage() {
                 <button
                   type="submit"
                   disabled={isSubmitting || !urlInfo?.valid}
-                  className="btn-gold w-full py-3 text-xs uppercase tracking-wider disabled:opacity-40"
+                  className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-brand py-3 text-xs font-semibold uppercase tracking-wider text-white hover:bg-brand-hover shadow-md transition-all disabled:opacity-50"
                 >
                   {isSubmitting ? (
                     <>
@@ -412,24 +415,26 @@ export default function AdminReelsPage() {
 
           {/* Current Reels List */}
           <div className="lg:col-span-7">
-            <div className="rounded-3xl border border-gold/20 bg-abyss p-6 shadow-xl">
+            <div className="rounded-3xl border border-border bg-surface p-6 sm:p-7 shadow-card">
               <div className="mb-5 flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
-                  <SlidersHorizontal className="h-5 w-5 text-gold" />
-                  <h3 className="font-display text-lg text-ivory">Active Reels ({reels.length})</h3>
+                  <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-secondary text-brand">
+                    <SlidersHorizontal className="h-4 w-4" />
+                  </span>
+                  <h3 className="font-display text-lg font-bold text-heading">Active Reels ({reels.length})</h3>
                 </div>
-                <span className="text-xs text-mist">Use arrows to adjust order</span>
+                <span className="text-xs text-muted">Use arrows to adjust order</span>
               </div>
 
               {loading ? (
-                <div className="flex flex-col items-center justify-center py-16 text-gold-light">
+                <div className="flex flex-col items-center justify-center py-16 text-brand">
                   <Loader2 className="h-8 w-8 animate-spin" />
-                  <span className="mt-3 text-xs uppercase tracking-wider text-ivory/70">
+                  <span className="mt-3 text-xs uppercase tracking-wider text-muted font-medium">
                     Loading collection…
                   </span>
                 </div>
               ) : reels.length === 0 ? (
-                <div className="py-12 text-center text-mist">
+                <div className="py-12 text-center text-body">
                   No Reels registered. Add your first Reel using the form.
                 </div>
               ) : (
@@ -437,32 +442,32 @@ export default function AdminReelsPage() {
                   {reels.map((reel, index) => (
                     <div
                       key={reel.id}
-                      className="flex flex-col gap-3 rounded-2xl border border-white/10 bg-ink/60 p-4 transition-colors hover:border-gold/30 sm:flex-row sm:items-center sm:justify-between"
+                      className="flex flex-col gap-3 rounded-2xl border border-border bg-page p-4 transition-colors hover:border-brand/40 sm:flex-row sm:items-center sm:justify-between shadow-sm"
                     >
                       <div className="flex items-start gap-3">
-                        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white/5 font-mono text-xs font-semibold text-ivory/60">
+                        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-secondary font-mono text-xs font-bold text-brand">
                           {index + 1}
                         </span>
                         <div className="space-y-1">
                           <div className="flex flex-wrap items-center gap-2">
-                            <span className="font-mono text-xs font-semibold text-gold-light">
+                            <span className="font-mono text-xs font-semibold text-brand">
                               {reel.code}
                             </span>
-                            <span className="rounded bg-white/10 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-ivory/70">
+                            <span className="rounded bg-secondary border border-border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-heading">
                               {reel.category}
                             </span>
                             {reel.featured && (
-                              <span className="inline-flex items-center gap-0.5 rounded border border-gold/40 bg-gold/20 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-gold-light">
-                                <Sparkles className="h-2 w-2" /> Featured
+                              <span className="inline-flex items-center gap-0.5 rounded border border-gold/40 bg-gold/15 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-heading">
+                                <Sparkles className="h-2 w-2 text-gold" /> Featured
                               </span>
                             )}
                           </div>
-                          <p className="line-clamp-2 text-xs text-ivory/85">{reel.caption}</p>
+                          <p className="line-clamp-2 text-xs text-heading font-medium">{reel.caption}</p>
                           <a
                             href={reel.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 text-[11px] text-mist transition-colors hover:text-gold"
+                            className="inline-flex items-center gap-1 text-[11px] text-muted transition-colors hover:text-brand"
                           >
                             {reel.url}
                             <ExternalLink className="h-2.5 w-2.5" />
@@ -475,7 +480,7 @@ export default function AdminReelsPage() {
                           type="button"
                           onClick={() => handleMove(index, -1)}
                           disabled={index === 0}
-                          className="rounded-lg border border-white/10 p-2 text-ivory/60 transition-colors hover:border-gold hover:text-gold disabled:opacity-25"
+                          className="rounded-lg border border-border bg-surface p-2 text-body transition-colors hover:border-brand hover:text-brand disabled:opacity-25 shadow-sm"
                           title="Move Up"
                           aria-label="Move Up"
                         >
@@ -485,7 +490,7 @@ export default function AdminReelsPage() {
                           type="button"
                           onClick={() => handleMove(index, 1)}
                           disabled={index === reels.length - 1}
-                          className="rounded-lg border border-white/10 p-2 text-ivory/60 transition-colors hover:border-gold hover:text-gold disabled:opacity-25"
+                          className="rounded-lg border border-border bg-surface p-2 text-body transition-colors hover:border-brand hover:text-brand disabled:opacity-25 shadow-sm"
                           title="Move Down"
                           aria-label="Move Down"
                         >
@@ -495,21 +500,21 @@ export default function AdminReelsPage() {
                         <button
                           type="button"
                           onClick={() => handleToggleFeatured(reel)}
-                          className={`rounded-lg border p-2 transition-colors ${
+                          className={`rounded-lg border p-2 transition-colors shadow-sm ${
                             reel.featured
-                              ? "border-gold bg-gold/20 text-gold-light"
-                              : "border-white/10 text-ivory/40 hover:border-gold hover:text-gold"
+                              ? "border-gold/50 bg-gold/20 text-heading font-bold"
+                              : "border-border bg-surface text-muted hover:border-brand hover:text-brand"
                           }`}
                           title={reel.featured ? "Unfeature from homepage" : "Feature on homepage"}
                           aria-label={reel.featured ? "Unfeature" : "Feature"}
                         >
-                          <Sparkles className="h-3.5 w-3.5" />
+                          <Sparkles className="h-3.5 w-3.5 text-gold" />
                         </button>
 
                         <button
                           type="button"
                           onClick={() => handleDelete(reel.id)}
-                          className="rounded-lg border border-red-500/20 p-2 text-red-400 transition-colors hover:border-red-500 hover:bg-red-500/10"
+                          className="rounded-lg border border-error/30 bg-surface p-2 text-error transition-colors hover:border-error hover:bg-error/10 shadow-sm"
                           title="Delete Reel"
                           aria-label="Delete Reel"
                         >

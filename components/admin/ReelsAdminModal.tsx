@@ -25,16 +25,23 @@ import {
 interface ReelsAdminModalProps {
   isOpen: boolean;
   onClose: () => void;
-  reels: InstagramReel[];
-  onReelsChange: (newReels: InstagramReel[]) => void;
+  reels?: InstagramReel[];
+  onReelsChange?: (newReels: InstagramReel[]) => void;
+  onReelsUpdated?: (newReels: InstagramReel[]) => void;
 }
 
 export default function ReelsAdminModal({
   isOpen,
   onClose,
-  reels,
+  reels = [],
   onReelsChange,
+  onReelsUpdated,
 }: ReelsAdminModalProps) {
+  const notifyChange = (updated: InstagramReel[]) => {
+    if (onReelsChange) onReelsChange(updated);
+    if (onReelsUpdated) onReelsUpdated(updated);
+  };
+
   const [activeTab, setActiveTab] = useState<"manage" | "add">("manage");
 
   // Add form fields
@@ -131,7 +138,7 @@ export default function ReelsAdminModal({
         throw new Error(data.error || "Failed to add reel");
       }
 
-      onReelsChange(data.reels);
+      notifyChange(data.reels);
       setActionMessage({ type: "success", text: "Reel added successfully!" });
       setNewUrl("");
       setNewCaption("");
@@ -158,7 +165,7 @@ export default function ReelsAdminModal({
         throw new Error(data.error || "Failed to delete reel");
       }
 
-      onReelsChange(data.reels);
+      notifyChange(data.reels);
       setActionMessage({ type: "success", text: "Reel removed from website." });
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Failed to delete reel";
@@ -176,7 +183,7 @@ export default function ReelsAdminModal({
       const data = await res.json();
       if (!res.ok || !data.success) throw new Error(data.error);
 
-      onReelsChange(data.reels);
+      notifyChange(data.reels);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Failed to update reel";
       setActionMessage({ type: "error", text: msg });
@@ -203,7 +210,7 @@ export default function ReelsAdminModal({
       const data = await res.json();
       if (!res.ok || !data.success) throw new Error(data.error);
 
-      onReelsChange(data.reels);
+      notifyChange(data.reels);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Failed to reorder reels";
       setActionMessage({ type: "error", text: msg });
@@ -227,7 +234,7 @@ export default function ReelsAdminModal({
       const data = await res.json();
       if (!res.ok || !data.success) throw new Error(data.error);
 
-      onReelsChange(data.reels);
+      notifyChange(data.reels);
       setActionMessage({ type: "success", text: "Reels reset to verified Sheferoy Guppy catalog." });
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Failed to reset reels";
@@ -237,23 +244,23 @@ export default function ReelsAdminModal({
 
   return (
     <div
-      className="fixed inset-0 z-[70] flex items-center justify-center bg-obsidian/95 p-3 sm:p-6 backdrop-blur-md"
+      className="fixed inset-0 z-[70] flex items-center justify-center bg-black/60 p-3 sm:p-6 backdrop-blur-md"
       role="dialog"
       aria-modal="true"
       aria-labelledby="admin-title"
     >
-      <div className="relative flex max-h-[92vh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl border border-gold/25 bg-abyss shadow-2xl">
+      <div className="relative flex max-h-[92vh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl border border-border bg-surface shadow-2xl">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-gold/15 bg-ink/70 px-6 py-4">
+        <div className="flex items-center justify-between border-b border-border bg-secondary/60 px-6 py-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-gold/30 bg-gold/10 text-gold-light">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand text-white shadow-sm">
               <SlidersHorizontal className="h-5 w-5" />
             </div>
             <div>
-              <h2 id="admin-title" className="font-display text-xl text-ivory">
+              <h2 id="admin-title" className="font-display text-xl font-bold text-heading">
                 Reel Management Console
               </h2>
-              <p className="text-xs text-mist">
+              <p className="text-xs text-muted">
                 Manage Instagram Reels displayed on Sheferoy Guppy homepage & gallery
               </p>
             </div>
@@ -262,7 +269,7 @@ export default function ReelsAdminModal({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-full border border-white/10 p-2 text-ivory/60 transition-colors hover:border-gold hover:text-gold-light"
+            className="rounded-full border border-border bg-surface p-2 text-muted transition-colors hover:border-brand hover:text-heading shadow-sm"
             aria-label="Close admin modal"
           >
             <X className="h-5 w-5" />
@@ -270,15 +277,15 @@ export default function ReelsAdminModal({
         </div>
 
         {/* Tab Bar */}
-        <div className="flex items-center justify-between border-b border-white/10 bg-obsidian/50 px-6 py-3">
+        <div className="flex items-center justify-between border-b border-border bg-secondary/30 px-6 py-3">
           <div className="flex gap-2">
             <button
               type="button"
               onClick={() => setActiveTab("manage")}
-              className={`rounded-lg px-4 py-2 text-xs font-semibold uppercase tracking-wider transition-colors ${
+              className={`rounded-xl px-4 py-2 text-xs font-semibold uppercase tracking-wider transition-all ${
                 activeTab === "manage"
-                  ? "bg-gold text-obsidian"
-                  : "border border-white/10 text-ivory/70 hover:border-gold/40"
+                  ? "bg-brand text-white shadow-sm font-bold"
+                  : "border border-border bg-surface text-body hover:border-brand/40"
               }`}
             >
               Current Reels ({reels.length})
@@ -286,10 +293,10 @@ export default function ReelsAdminModal({
             <button
               type="button"
               onClick={() => setActiveTab("add")}
-              className={`inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-xs font-semibold uppercase tracking-wider transition-colors ${
+              className={`inline-flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs font-semibold uppercase tracking-wider transition-all ${
                 activeTab === "add"
-                  ? "bg-gold text-obsidian"
-                  : "border border-white/10 text-ivory/70 hover:border-gold/40"
+                  ? "bg-brand text-white shadow-sm font-bold"
+                  : "border border-border bg-surface text-body hover:border-brand/40"
               }`}
             >
               <Plus className="h-3.5 w-3.5" />
@@ -300,7 +307,7 @@ export default function ReelsAdminModal({
           <button
             type="button"
             onClick={handleResetDefaults}
-            className="inline-flex items-center gap-1 text-[11px] font-medium text-gold/80 transition-colors hover:text-gold-light"
+            className="inline-flex items-center gap-1 text-xs font-medium text-brand hover:text-brand-hover transition-colors"
             title="Restore official verified Sheferoy Reels"
           >
             <RotateCcw className="h-3 w-3" />
@@ -311,16 +318,16 @@ export default function ReelsAdminModal({
         {/* Status Alerts */}
         {actionMessage && (
           <div
-            className={`mx-6 mt-4 flex items-center gap-2 rounded-xl border p-3 text-xs ${
+            className={`mx-6 mt-4 flex items-center gap-2 rounded-xl border p-3 text-xs font-medium ${
               actionMessage.type === "success"
-                ? "border-green-500/30 bg-green-950/40 text-green-300"
-                : "border-red-500/30 bg-red-950/40 text-red-300"
+                ? "border-success/30 bg-success/10 text-success"
+                : "border-error/30 bg-error/10 text-error"
             }`}
           >
             {actionMessage.type === "success" ? (
-              <CheckCircle2 className="h-4 w-4 shrink-0 text-green-400" />
+              <CheckCircle2 className="h-4 w-4 shrink-0 text-success" />
             ) : (
-              <AlertCircle className="h-4 w-4 shrink-0 text-red-400" />
+              <AlertCircle className="h-4 w-4 shrink-0 text-error" />
             )}
             <span>{actionMessage.text}</span>
           </div>
@@ -333,11 +340,11 @@ export default function ReelsAdminModal({
             <div className="space-y-3">
               {reels.length === 0 ? (
                 <div className="py-12 text-center">
-                  <p className="text-sm text-mist">No Reels in the collection.</p>
+                  <p className="text-sm text-body">No Reels in the collection.</p>
                   <button
                     type="button"
                     onClick={() => setActiveTab("add")}
-                    className="btn-gold mt-4 py-2 text-xs"
+                    className="mt-4 inline-flex items-center justify-center rounded-xl bg-brand px-5 py-2 text-xs font-semibold uppercase tracking-wider text-white hover:bg-brand-hover shadow-sm"
                   >
                     Add your first Reel
                   </button>
@@ -346,33 +353,33 @@ export default function ReelsAdminModal({
                 reels.map((reel, index) => (
                   <div
                     key={reel.id}
-                    className="flex flex-col gap-3 rounded-2xl border border-white/10 bg-ink/50 p-4 transition-colors hover:border-gold/30 sm:flex-row sm:items-center sm:justify-between"
+                    className="flex flex-col gap-3 rounded-2xl border border-border bg-page p-4 transition-colors hover:border-brand/40 sm:flex-row sm:items-center sm:justify-between shadow-sm"
                   >
                     {/* Reel info */}
                     <div className="flex items-start gap-3">
-                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white/5 font-mono text-xs font-semibold text-ivory/60">
+                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-secondary font-mono text-xs font-bold text-brand">
                         {index + 1}
                       </span>
                       <div className="space-y-1">
                         <div className="flex flex-wrap items-center gap-2">
-                          <span className="font-mono text-xs font-semibold text-gold-light">
+                          <span className="font-mono text-xs font-semibold text-brand">
                             {reel.code}
                           </span>
-                          <span className="rounded bg-white/10 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-ivory/70">
+                          <span className="rounded bg-secondary border border-border px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-heading">
                             {reel.category}
                           </span>
                           {reel.featured && (
-                            <span className="inline-flex items-center gap-0.5 rounded border border-gold/40 bg-gold/20 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-gold-light">
-                              <Sparkles className="h-2 w-2" /> Featured
+                            <span className="inline-flex items-center gap-0.5 rounded border border-gold/40 bg-gold/15 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-heading">
+                              <Sparkles className="h-2 w-2 text-gold" /> Featured
                             </span>
                           )}
                         </div>
-                        <p className="line-clamp-1 text-xs text-ivory/80">{reel.caption}</p>
+                        <p className="line-clamp-1 text-xs text-heading font-medium">{reel.caption}</p>
                         <a
                           href={reel.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-[11px] text-mist transition-colors hover:text-gold"
+                          className="inline-flex items-center gap-1 text-[11px] text-muted transition-colors hover:text-brand"
                         >
                           {reel.url}
                           <ExternalLink className="h-2.5 w-2.5" />
@@ -387,7 +394,7 @@ export default function ReelsAdminModal({
                         type="button"
                         onClick={() => handleMoveOrder(index, -1)}
                         disabled={index === 0}
-                        className="rounded-lg border border-white/10 p-1.5 text-ivory/60 transition-colors hover:border-gold hover:text-gold disabled:opacity-25"
+                        className="rounded-lg border border-border bg-surface p-1.5 text-body transition-colors hover:border-brand hover:text-brand disabled:opacity-25 shadow-sm"
                         title="Move Up"
                         aria-label="Move Up"
                       >
@@ -397,7 +404,7 @@ export default function ReelsAdminModal({
                         type="button"
                         onClick={() => handleMoveOrder(index, 1)}
                         disabled={index === reels.length - 1}
-                        className="rounded-lg border border-white/10 p-1.5 text-ivory/60 transition-colors hover:border-gold hover:text-gold disabled:opacity-25"
+                        className="rounded-lg border border-border bg-surface p-1.5 text-body transition-colors hover:border-brand hover:text-brand disabled:opacity-25 shadow-sm"
                         title="Move Down"
                         aria-label="Move Down"
                       >
@@ -408,22 +415,22 @@ export default function ReelsAdminModal({
                       <button
                         type="button"
                         onClick={() => handleToggleFeatured(reel)}
-                        className={`rounded-lg border p-1.5 transition-colors ${
+                        className={`rounded-lg border p-1.5 transition-colors shadow-sm ${
                           reel.featured
-                            ? "border-gold bg-gold/20 text-gold-light"
-                            : "border-white/10 text-ivory/40 hover:border-gold hover:text-gold"
+                            ? "border-gold/50 bg-gold/20 text-heading font-bold"
+                            : "border-border bg-surface text-muted hover:border-brand hover:text-brand"
                         }`}
                         title={reel.featured ? "Unfeature from homepage" : "Feature on homepage"}
                         aria-label={reel.featured ? "Unfeature" : "Feature"}
                       >
-                        <Sparkles className="h-3.5 w-3.5" />
+                        <Sparkles className="h-3.5 w-3.5 text-gold" />
                       </button>
 
                       {/* Delete Button */}
                       <button
                         type="button"
                         onClick={() => handleDelete(reel.id)}
-                        className="rounded-lg border border-red-500/20 p-1.5 text-red-400 transition-colors hover:border-red-500 hover:bg-red-500/10"
+                        className="rounded-lg border border-error/30 bg-surface p-1.5 text-error transition-colors hover:border-error hover:bg-error/10 shadow-sm"
                         title="Remove Reel"
                         aria-label="Remove Reel"
                       >
@@ -440,7 +447,7 @@ export default function ReelsAdminModal({
               <div>
                 <label
                   htmlFor="reel-url"
-                  className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-ivory/80"
+                  className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-heading"
                 >
                   Instagram Reel or Post URL <span className="text-gold">*</span>
                 </label>
@@ -450,13 +457,13 @@ export default function ReelsAdminModal({
                   value={newUrl}
                   onChange={(e) => setNewUrl(e.target.value)}
                   placeholder="https://www.instagram.com/reel/DRmaGfQCZES/"
-                  className="field text-sm"
+                  className="w-full rounded-xl border border-border bg-page px-3.5 py-2.5 text-sm text-heading placeholder:text-muted focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/10 shadow-sm"
                   required
                 />
                 {urlValidation && (
                   <p
-                    className={`mt-1.5 text-xs flex items-center gap-1.5 ${
-                      urlValidation.valid ? "text-green-400" : "text-red-400"
+                    className={`mt-1.5 text-xs flex items-center gap-1.5 font-medium ${
+                      urlValidation.valid ? "text-success" : "text-error"
                     }`}
                   >
                     {urlValidation.valid ? (
@@ -467,7 +474,7 @@ export default function ReelsAdminModal({
                     {urlValidation.message}
                   </p>
                 )}
-                <p className="mt-1 text-[11px] text-mist">
+                <p className="mt-1 text-xs text-muted">
                   Supported formats: <code>https://www.instagram.com/reel/[CODE]/</code> or <code>/p/[CODE]/</code>
                 </p>
               </div>
@@ -475,7 +482,7 @@ export default function ReelsAdminModal({
               <div>
                 <label
                   htmlFor="reel-caption"
-                  className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-ivory/80"
+                  className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-heading"
                 >
                   Caption / Description <span className="text-gold">*</span>
                 </label>
@@ -485,7 +492,7 @@ export default function ReelsAdminModal({
                   value={newCaption}
                   onChange={(e) => setNewCaption(e.target.value)}
                   placeholder="Describe the bloodline, feeding session, or breeding update shown in this video…"
-                  className="field text-sm"
+                  className="w-full rounded-xl border border-border bg-page px-3.5 py-2.5 text-sm text-heading placeholder:text-muted focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/10 shadow-sm resize-none"
                   required
                 />
               </div>
@@ -494,7 +501,7 @@ export default function ReelsAdminModal({
                 <div>
                   <label
                     htmlFor="reel-category"
-                    className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-ivory/80"
+                    className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-heading"
                   >
                     Category
                   </label>
@@ -502,12 +509,12 @@ export default function ReelsAdminModal({
                     id="reel-category"
                     value={newCategory}
                     onChange={(e) => setNewCategory(e.target.value as ReelItemCategory)}
-                    className="field text-sm text-ivory"
+                    className="w-full rounded-xl border border-border bg-page px-3 py-2.5 text-sm text-heading focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/10 shadow-sm"
                   >
                     {reelCategories
                       .filter((c) => c !== "All")
                       .map((cat) => (
-                        <option key={cat} value={cat} className="bg-abyss text-ivory">
+                        <option key={cat} value={cat}>
                           {cat}
                         </option>
                       ))}
@@ -517,7 +524,7 @@ export default function ReelsAdminModal({
                 <div>
                   <label
                     htmlFor="reel-variety"
-                    className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-ivory/80"
+                    className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-heading"
                   >
                     Associated Variety (Optional)
                   </label>
@@ -527,7 +534,7 @@ export default function ReelsAdminModal({
                     value={newVariety}
                     onChange={(e) => setNewVariety(e.target.value)}
                     placeholder="e.g. Platinum Koi Ribbon"
-                    className="field text-sm"
+                    className="w-full rounded-xl border border-border bg-page px-3.5 py-2.5 text-sm text-heading placeholder:text-muted focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/10 shadow-sm"
                   />
                 </div>
               </div>
@@ -538,9 +545,9 @@ export default function ReelsAdminModal({
                   id="reel-featured"
                   checked={newFeatured}
                   onChange={(e) => setNewFeatured(e.target.checked)}
-                  className="h-4 w-4 rounded border-gold/40 bg-white/10 text-gold focus:ring-gold"
+                  className="h-4 w-4 rounded border-border text-brand focus:ring-brand"
                 />
-                <label htmlFor="reel-featured" className="text-xs text-ivory/90">
+                <label htmlFor="reel-featured" className="text-xs text-body font-medium">
                   Feature this Reel on the Homepage showcase
                 </label>
               </div>
@@ -549,14 +556,14 @@ export default function ReelsAdminModal({
                 <button
                   type="button"
                   onClick={() => setActiveTab("manage")}
-                  className="btn-ghost py-2.5 text-xs"
+                  className="rounded-xl border border-border bg-surface px-4 py-2.5 text-xs font-semibold text-body hover:border-brand hover:text-brand transition-colors shadow-sm"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting || !urlValidation?.valid}
-                  className="btn-gold py-2.5 text-xs disabled:opacity-40"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-brand px-5 py-2.5 text-xs font-semibold uppercase tracking-wider text-white hover:bg-brand-hover shadow-md transition-all disabled:opacity-50"
                 >
                   {isSubmitting ? (
                     <>

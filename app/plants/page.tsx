@@ -3,7 +3,7 @@ import PageHeader from "@/components/layout/PageHeader";
 import PlantsClient from "@/components/plants/PlantsClient";
 
 export const metadata: Metadata = {
-  title: "Live Aquatic Plants — Guppy Grass, Vallisneria & More",
+  title: "Live Aquatic Plants — Guppy Grass, Vallisneria & More | Sheferoy Guppy",
   description:
     "Explore live aquatic plants from Sheferoy Guppy, Kanyakumari, Tamil Nadu — Guppy Grass, Vallisneria spiralis, Pennywort, Foxtail, Dwarf Water Lettuce and Duckweed with care guidance.",
   keywords: [
@@ -12,6 +12,7 @@ export const metadata: Metadata = {
     "guppy grass for aquariums",
     "Vallisneria spiralis",
     "floating aquarium plants",
+    "Sheferoy Guppy",
     "dwarf water lettuce",
     "pennywort aquarium plant",
   ],
@@ -28,12 +29,12 @@ export default function PlantsPage() {
   return (
     <>
       <PageHeader
-        tone="moss"
+        tone="emerald"
         eyebrow="Botanical Collection"
         title={
           <>
             Living Greenery for{" "}
-            <span className="font-display italic text-moss-light">Your Aquascape</span>
+            <span className="font-display italic text-brand">Your Aquascape</span>
           </>
         }
         description="A considered collection of submerged and floating plants — chosen for guppy aquariums, easy care and natural water balance."

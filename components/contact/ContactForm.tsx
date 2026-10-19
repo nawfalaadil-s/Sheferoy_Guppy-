@@ -50,12 +50,16 @@ export default function ContactForm() {
   };
 
   const inputClass = (hasError: boolean) =>
-    `field ${hasError ? "border-red-500/70 focus:border-red-500 focus:ring-red-500/20" : ""}`;
+    `w-full rounded-xl border bg-page px-4 py-3 text-sm text-heading placeholder:text-muted shadow-sm transition-colors focus:outline-none ${
+      hasError
+        ? "border-error focus:border-error focus:ring-2 focus:ring-error/20"
+        : "border-border focus:border-brand focus:ring-2 focus:ring-brand/10"
+    }`;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
       <div>
-        <label htmlFor="name" className="mb-2 block font-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-ivory/70">
+        <label htmlFor="name" className="mb-2 block font-sans text-xs font-semibold uppercase tracking-wider text-heading">
           Name <span className="text-gold">*</span>
         </label>
         <input
@@ -68,14 +72,14 @@ export default function ContactForm() {
           aria-invalid={!!errors.name}
         />
         {errors.name && (
-          <p className="mt-2 text-xs text-red-400" role="alert">
+          <p className="mt-2 text-xs text-error font-medium" role="alert">
             {errors.name.message}
           </p>
         )}
       </div>
 
       <div>
-        <label htmlFor="contact" className="mb-2 block font-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-ivory/70">
+        <label htmlFor="contact" className="mb-2 block font-sans text-xs font-semibold uppercase tracking-wider text-heading">
           Email or Phone <span className="text-gold">*</span>
         </label>
         <input
@@ -88,14 +92,14 @@ export default function ContactForm() {
           aria-invalid={!!errors.contact}
         />
         {errors.contact && (
-          <p className="mt-2 text-xs text-red-400" role="alert">
+          <p className="mt-2 text-xs text-error font-medium" role="alert">
             {errors.contact.message}
           </p>
         )}
       </div>
 
       <div>
-        <label htmlFor="subject" className="mb-2 block font-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-ivory/70">
+        <label htmlFor="subject" className="mb-2 block font-sans text-xs font-semibold uppercase tracking-wider text-heading">
           Subject <span className="text-gold">*</span>
         </label>
         <input
@@ -107,14 +111,14 @@ export default function ContactForm() {
           aria-invalid={!!errors.subject}
         />
         {errors.subject && (
-          <p className="mt-2 text-xs text-red-400" role="alert">
+          <p className="mt-2 text-xs text-error font-medium" role="alert">
             {errors.subject.message}
           </p>
         )}
       </div>
 
       <div>
-        <label htmlFor="message" className="mb-2 block font-sans text-[11px] font-semibold uppercase tracking-[0.18em] text-ivory/70">
+        <label htmlFor="message" className="mb-2 block font-sans text-xs font-semibold uppercase tracking-wider text-heading">
           Message <span className="text-gold">*</span>
         </label>
         <textarea
@@ -122,38 +126,41 @@ export default function ContactForm() {
           rows={6}
           {...register("message")}
           className={`${inputClass(!!errors.message)} resize-none`}
-          placeholder="Tell us about the strains, plants or tank you have in mind…"
+          placeholder="Tell us about the strains, plants or aquarium setup you have in mind…"
           aria-invalid={!!errors.message}
         />
         {errors.message && (
-          <p className="mt-2 text-xs text-red-400" role="alert">
+          <p className="mt-2 text-xs text-error font-medium" role="alert">
             {errors.message.message}
           </p>
         )}
       </div>
 
-      <button type="submit" disabled={submitStatus === "loading"} className="btn-gold w-full justify-center py-4">
+      <button
+        type="submit"
+        disabled={submitStatus === "loading"}
+        className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-brand py-3.5 px-6 text-sm font-semibold uppercase tracking-wider text-white hover:bg-brand-hover shadow-md transition-all duration-200"
+      >
         {submitStatus === "loading" && <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />}
         {submitStatus === "loading" ? "Sending…" : "Send message"}
       </button>
 
-      <p className="text-center text-[11px] leading-relaxed text-ivory/40">
-        This form is a demonstration enquirer — the fastest response is always WhatsApp.
+      <p className="text-center text-xs text-muted">
+        For immediate tank video previews and reserved batches, we recommend messaging us on WhatsApp.
       </p>
 
       {submitStatus === "success" && (
-        <div className="flex items-start gap-3 rounded-xl border border-moss-light/30 bg-moss/15 p-4" role="alert">
-          <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-moss-light" aria-hidden="true" />
-          <p className="text-sm leading-relaxed text-ivory/90">
-            Thank you for your message. We&apos;ll get back to you soon — for anything urgent, ping us on
-            WhatsApp.
+        <div className="flex items-start gap-3 rounded-xl border border-success/30 bg-success/10 p-4" role="alert">
+          <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-success" aria-hidden="true" />
+          <p className="text-sm leading-relaxed text-heading font-medium">
+            Thank you for your message. We will review your inquiry and reply promptly.
           </p>
         </div>
       )}
 
       {submitStatus === "error" && (
-        <div className="rounded-xl border border-red-500/30 bg-red-500/10 p-4" role="alert">
-          <p className="text-sm leading-relaxed text-red-300">{errorMessage}</p>
+        <div className="rounded-xl border border-error/30 bg-error/10 p-4" role="alert">
+          <p className="text-sm leading-relaxed text-error font-medium">{errorMessage}</p>
         </div>
       )}
     </form>

@@ -1,20 +1,19 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, Inter } from "next/font/google";
+import { Plus_Jakarta_Sans, Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import AnnouncementBar from "@/components/home/AnnouncementBar";
 
-const display = Cormorant_Garamond({
+const display = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  style: ["normal", "italic"],
+  weight: ["500", "600", "700", "800"],
   variable: "--font-display",
   display: "swap",
 });
 
 const sans = Inter({
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
   variable: "--font-sans",
   display: "swap",
 });
@@ -22,44 +21,42 @@ const sans = Inter({
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#090B0D",
+  themeColor: "#FAFAF7",
 };
 
 export const metadata: Metadata = {
   title: {
-    default: "Sheferoy Guppy — Premium Bloodline Breeder | Kanyakumari, Tamil Nadu",
+    default: "Sheferoy Guppy — Premium Ornamental Guppies & Bettas",
     template: "%s | Sheferoy Guppy",
   },
   description:
-    "Discover 65+ premium guppy varieties from Sheferoy Guppy, a trusted bloodline breeder based in Kanyakumari, Tamil Nadu. Safe pan-India shipping. Trusted by 1,700+ hobbyists.",
+    "Explore our collection of ornamental guppies, bettas, and breeding pairs from Sheferoy Guppy in Kanyakumari, Tamil Nadu.",
   keywords: [
     "Sheferoy Guppy",
-    "guppy breeder",
-    "Kanyakumari",
-    "Tamil Nadu",
-    "ornamental guppy fish",
-    "guppy varieties",
-    "live aquatic plants",
-    "aquarium fish",
+    "ornamental guppies",
+    "bettas India",
+    "breeding pairs",
+    "fancy guppies Tamil Nadu",
+    "guppy breeder Kanyakumari",
   ],
   authors: [{ name: "Sheferoy Guppy" }],
-  creator: "Skynova Tech Solutions",
+  creator: "Sheferoy Guppy",
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
   openGraph: {
     type: "website",
     locale: "en_IN",
     url: "/",
     siteName: "Sheferoy Guppy",
-    title: "Sheferoy Guppy — Premium Bloodline Breeder",
+    title: "Sheferoy Guppy — Premium Ornamental Guppies & Bettas",
     description:
-      "Discover 65+ premium guppy varieties from Sheferoy Guppy, a trusted bloodline breeder based in Kanyakumari, Tamil Nadu.",
+      "Explore our collection of ornamental guppies, bettas, and breeding pairs from Sheferoy Guppy.",
     images: [{ url: "/logo.png", width: 1200, height: 630, alt: "Sheferoy Guppy" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Sheferoy Guppy — Premium Bloodline Breeder",
+    title: "Sheferoy Guppy — Premium Ornamental Guppies & Bettas",
     description:
-      "Discover 65+ premium guppy varieties from Sheferoy Guppy, a trusted bloodline breeder based in Kanyakumari, Tamil Nadu.",
+      "Explore our collection of ornamental guppies, bettas, and breeding pairs from Sheferoy Guppy.",
     images: ["/logo.png"],
   },
   robots: {
@@ -82,14 +79,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${display.variable} ${sans.variable}`}>
-      <body className="font-sans">
+      <body className="min-h-screen bg-page text-body font-sans antialiased selection:bg-brand-light selection:text-brand">
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-gold focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-obsidian"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-xl focus:bg-brand focus:px-4 focus:py-2.5 focus:text-sm focus:font-semibold focus:text-white focus:shadow-teal"
         >
           Skip to content
         </a>
-        <AnnouncementBar />
         <Header />
         <main id="main">{children}</main>
         <Footer />

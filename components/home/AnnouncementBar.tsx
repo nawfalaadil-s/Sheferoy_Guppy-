@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 // Administrator-controlled announcement (Supabase-backed in production)
 const announcement = {
   enabled: true,
-  message: "New arrivals — Rare Moscow Blue and Platinum strains now available",
+  message: "New arrivals — Rare Moscow Blue and Platinum White bloodlines now shipping pan-India",
   startDate: "2026-10-01",
   endDate: "2026-12-31",
 };
@@ -36,18 +36,22 @@ export default function AnnouncementBar() {
   if (!isVisible) return null;
 
   return (
-    <div className="relative z-40 bg-gradient-to-r from-gold-dark via-gold to-gold-dark text-obsidian">
-      <div className="mx-auto flex max-w-site items-center justify-between gap-4 px-4 py-2.5 sm:px-6 lg:px-10">
-        <p className="flex-1 text-center font-sans text-[11px] font-semibold uppercase tracking-[0.18em]">
+    <div className="relative z-40 border-b border-border bg-secondary text-charcoal">
+      <div className="mx-auto flex max-w-site items-center justify-between gap-4 px-4 py-2 sm:px-6 lg:px-10">
+        <div className="flex-1 text-center font-sans text-xs font-medium text-body sm:text-xs">
+          <span className="inline-flex items-center gap-1.5 font-semibold text-brand mr-2">
+            <span className="h-1.5 w-1.5 rounded-full bg-gold animate-pulse" />
+            Sheferoy Guppy Update:
+          </span>
           {announcement.message}
-        </p>
+        </div>
         <button
           type="button"
           onClick={handleDismiss}
-          className="-m-1.5 p-1.5 transition-opacity hover:opacity-60"
+          className="-m-1 p-1 text-muted transition-colors hover:text-charcoal"
           aria-label="Dismiss announcement"
         >
-          <X className="h-4 w-4" aria-hidden="true" />
+          <X className="h-3.5 w-3.5" aria-hidden="true" />
         </button>
       </div>
     </div>

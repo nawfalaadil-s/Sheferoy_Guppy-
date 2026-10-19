@@ -1,77 +1,65 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Instagram, MessageCircle, MapPin } from "lucide-react";
+import { Phone, Mail, MessageCircle } from "lucide-react";
 
-const explore = [
-  { name: "About Us", href: "/about" },
-  { name: "Guppy Varieties", href: "/varieties" },
-  { name: "Live Plants", href: "/plants" },
+const quickLinks = [
+  { name: "Home", href: "/" },
+  { name: "Guppies", href: "/varieties?category=Guppies" },
+  { name: "Bettas", href: "/varieties?category=Bettas" },
   { name: "Gallery", href: "/gallery" },
-];
-
-const discover = [
-  { name: "Instagram Reels", href: "/#reels-heading" },
-  { name: "Journal", href: "/blog" },
-  { name: "Offers", href: "/offers" },
   { name: "Contact", href: "/contact" },
+  { name: "Privacy Policy", href: "/privacy" },
+  { name: "Terms of Service", href: "/terms" },
 ];
 
 export default function Footer() {
   const year = new Date().getFullYear();
-  const whatsapp = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
 
   return (
-    <footer className="relative border-t border-gold/15 bg-obsidian" aria-labelledby="footer-heading">
+    <footer className="border-t border-border bg-white py-10 sm:py-12" aria-labelledby="footer-heading">
       <h2 id="footer-heading" className="sr-only">
         Footer
       </h2>
 
-      <div className="mx-auto max-w-site px-4 pb-10 pt-16 sm:px-6 lg:px-10 lg:pt-20">
-        <div className="grid gap-12 lg:grid-cols-12 lg:gap-8">
-          {/* Brand */}
+      <div className="mx-auto max-w-site px-4 sm:px-6 lg:px-10">
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-12 lg:gap-10 pb-8 border-b border-border">
+          {/* Brand & Category Info */}
           <div className="lg:col-span-5">
-            <Image src="/logo.png" alt="Sheferoy Guppy" width={160} height={80} className="h-14 w-auto object-contain" />
-            <p className="mt-5 max-w-sm text-sm leading-relaxed text-mist">
-              Premium guppy bloodline breeder based in Kanyakumari, Tamil Nadu, offering 65+ ornamental
-              varieties and live aquatic plants. Safe pan-India shipping.
-            </p>
-            <div className="mt-6 flex items-center gap-3">
-              <Link
-                href={process.env.NEXT_PUBLIC_INSTAGRAM_URL || "https://www.instagram.com/sheferoyguppy/"}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="glass inline-flex h-10 w-10 items-center justify-center rounded-full text-ivory transition-all hover:border-gold/50 hover:text-gold-light"
-                aria-label="Sheferoy Guppy on Instagram"
-              >
-                <Instagram className="h-4 w-4" aria-hidden="true" />
-              </Link>
-              {whatsapp && (
-                <Link
-                  href={`https://wa.me/${whatsapp}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="glass inline-flex h-10 w-10 items-center justify-center rounded-full text-ivory transition-all hover:border-gold/50 hover:text-gold-light"
-                  aria-label="Enquire on WhatsApp"
-                >
-                  <MessageCircle className="h-4 w-4" aria-hidden="true" />
-                </Link>
-              )}
-            </div>
-            <p className="mt-6 inline-flex items-center gap-2 font-sans text-[10px] font-semibold uppercase tracking-[0.22em] text-ivory/45">
-              <MapPin className="h-3.5 w-3.5 text-gold" aria-hidden="true" />
-              Kanyakumari · Tamil Nadu · India
+            <Link href="/" className="inline-flex items-center gap-3 group">
+              <div className="relative h-10 w-10 overflow-hidden rounded-xl border border-border bg-white p-0.5 shadow-subtle">
+                <Image
+                  src="/logo.png"
+                  alt="Sheferoy Guppy"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-display text-base font-bold tracking-tight text-heading">
+                  Sheferoy Guppy
+                </span>
+                <span className="text-[10px] font-semibold uppercase tracking-wider text-muted">
+                  Ornamental Guppies, Bettas & Breeding Pairs
+                </span>
+              </div>
+            </Link>
+
+            <p className="mt-3 text-xs sm:text-sm text-body max-w-sm leading-relaxed">
+              Premium ornamental guppies, bettas, and breeding pairs carefully conditioned for beauty, vigor, and true-breeding genetics.
             </p>
           </div>
 
-          {/* Navigation */}
-          <nav className="lg:col-span-3" aria-label="Explore">
-            <h3 className="eyebrow">Explore</h3>
-            <ul className="mt-5 space-y-3">
-              {explore.map((item) => (
+          {/* Quick Navigation Links */}
+          <nav className="lg:col-span-3" aria-label="Quick Links">
+            <h3 className="font-display text-xs font-bold uppercase tracking-wider text-heading">
+              Quick Links
+            </h3>
+            <ul className="mt-3 space-y-2">
+              {quickLinks.slice(0, 5).map((item) => (
                 <li key={item.name}>
                   <Link
                     href={item.href}
-                    className="text-sm text-mist transition-colors hover:text-gold-light"
+                    className="text-xs sm:text-sm text-body hover:text-brand transition-colors"
                   >
                     {item.name}
                   </Link>
@@ -80,67 +68,56 @@ export default function Footer() {
             </ul>
           </nav>
 
-          <nav className="lg:col-span-2" aria-label="Discover">
-            <h3 className="eyebrow">Discover</h3>
-            <ul className="mt-5 space-y-3">
-              {discover.map((item) => (
-                <li key={item.name}>
-                  <Link
-                    href={item.href}
-                    className="text-sm text-mist transition-colors hover:text-gold-light"
-                  >
-                    {item.name}
-                  </Link>
-                </li>
-              ))}
+          {/* Contact Details */}
+          <div className="lg:col-span-4">
+            <h3 className="font-display text-xs font-bold uppercase tracking-wider text-heading">
+              Contact Details
+            </h3>
+            <ul className="mt-3 space-y-2.5 text-xs sm:text-sm text-body">
+              <li>
+                <a
+                  href="tel:7358612156"
+                  className="inline-flex items-center gap-2 hover:text-brand transition-colors"
+                >
+                  <Phone className="h-3.5 w-3.5 text-brand shrink-0" aria-hidden="true" />
+                  <span>Contact: <strong className="text-charcoal font-semibold">7358612156</strong></span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://wa.me/919489184047?text=Hi%20Sheferoy%20Guppy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 hover:text-brand transition-colors"
+                >
+                  <MessageCircle className="h-3.5 w-3.5 text-success shrink-0" aria-hidden="true" />
+                  <span>WhatsApp: <strong className="text-charcoal font-semibold">94891 84047</strong></span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="mailto:eliteguppyss@gmail.com"
+                  className="inline-flex items-center gap-2 hover:text-brand transition-colors"
+                >
+                  <Mail className="h-3.5 w-3.5 text-brand shrink-0" aria-hidden="true" />
+                  <span>Email: <strong className="text-charcoal font-semibold">eliteguppyss@gmail.com</strong></span>
+                </a>
+              </li>
             </ul>
-          </nav>
-
-          {/* Enquiry */}
-          <div className="lg:col-span-2">
-            <h3 className="eyebrow">Enquiries</h3>
-            <p className="mt-5 text-sm leading-relaxed text-mist">
-              The fastest way to reach us is WhatsApp or Instagram direct message.
-            </p>
-            <Link
-              href={whatsapp ? `https://wa.me/${whatsapp}` : "/contact"}
-              target={whatsapp ? "_blank" : undefined}
-              rel={whatsapp ? "noopener noreferrer" : undefined}
-              className="btn-link mt-4"
-            >
-              Start an enquiry
-            </Link>
           </div>
         </div>
 
-        <div className="hairline mt-14" />
-
-        <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <p className="font-sans text-[11px] tracking-wide text-ivory/40">
-            © {year} Sheferoy Guppy. All rights reserved.
-          </p>
-          <div className="flex items-center gap-5">
-            <Link href="/privacy" className="font-sans text-[11px] tracking-wide text-ivory/40 transition-colors hover:text-gold-light">
-              Privacy
+        {/* Bottom Bar */}
+        <div className="pt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between text-xs text-muted">
+          <p>© {year} Sheferoy Guppy. All rights reserved.</p>
+          <div className="flex gap-4">
+            <Link href="/privacy" className="hover:text-brand transition-colors">
+              Privacy Policy
             </Link>
-            <Link href="/terms" className="font-sans text-[11px] tracking-wide text-ivory/40 transition-colors hover:text-gold-light">
-              Terms
-            </Link>
-            <Link href="/admin/reels" className="font-sans text-[11px] tracking-wide text-gold/60 transition-colors hover:text-gold-light">
-              Manage Reels
+            <Link href="/terms" className="hover:text-brand transition-colors">
+              Terms of Service
             </Link>
           </div>
-          <p className="font-sans text-[11px] tracking-wide text-ivory/40">
-            Designed &amp; Developed by{" "}
-            <Link
-              href="https://skynovatech.in/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gold/80 transition-colors hover:text-gold-light"
-            >
-              Skynova Tech Solutions
-            </Link>
-          </p>
         </div>
       </div>
     </footer>

@@ -14,6 +14,7 @@ export interface Plant {
   shortDescription: string;
   description: string;
   art: PlantArtType;
+  image: string;
   careInformation?: {
     lighting: string;
     growth: string;
@@ -36,6 +37,7 @@ export const plants: Plant[] = [
     description:
       "Pennywort is a popular aquarium plant known for its rapid growth and attractive round leaves. This versatile plant can be grown as a floating plant or rooted in substrate. Its bright green foliage adds natural beauty to any aquarium setup and provides excellent cover for fish fry. Pennywort is hardy and adaptable, making it suitable for both beginners and experienced aquarists.",
     art: "pennywort",
+    image: "/images/plants/pennywort.jpg",
     careInformation: {
       lighting: "Low to High — adapts to various conditions",
       growth: "Fast — regular trimming recommended",
@@ -56,6 +58,7 @@ export const plants: Plant[] = [
     description:
       "Vallisneria spiralis is a hardy aquarium plant featuring long, tape-like leaves that grow from a rosette base. This plant is excellent for creating natural-looking backgrounds in aquariums. It spreads through runners and can quickly fill empty spaces. Vallisneria is highly tolerant of various water conditions and provides excellent habitat for guppies and other small fish.",
     art: "vallisneria",
+    image: "/images/plants/vallisneria.jpg",
     careInformation: {
       lighting: "Low to Moderate — tolerates lower light levels",
       growth: "Moderate to Fast — spreads via runners",
@@ -76,6 +79,7 @@ export const plants: Plant[] = [
     description:
       "Foxtail is a beautiful aquatic plant with fine, feather-like leaves arranged along upright stems. The plant creates a soft, bushy appearance that provides excellent visual interest and natural habitat. Foxtail is particularly effective in guppy tanks, offering hiding places for fry while maintaining an attractive aesthetic. This plant benefits from regular pruning to maintain its shape.",
     art: "foxtail",
+    image: "/images/plants/foxtail.jpg",
     careInformation: {
       lighting: "Moderate to High — requires adequate lighting",
       growth: "Fast — responds well to nutrient-rich conditions",
@@ -96,6 +100,7 @@ export const plants: Plant[] = [
     description:
       "Guppy Grass is a fast-growing, bushy aquatic plant that is indispensable for guppy breeding. Its dense, fine foliage creates perfect hiding spots for newborn fry, significantly improving survival rates. This plant is extremely hardy and can thrive in a wide range of conditions. Guppy Grass also acts as a natural water filter, absorbing excess nutrients and improving water quality.",
     art: "guppy-grass",
+    image: "/images/plants/guppy-grass.jpg",
     careInformation: {
       lighting: "Low to High — very adaptable",
       growth: "Very Fast — may require frequent trimming",
@@ -116,6 +121,7 @@ export const plants: Plant[] = [
     description:
       "Dwarf Water Lettuce is a smaller variety of the popular floating plant, perfect for smaller aquariums. Its rosettes of pale green leaves float gracefully on the water surface, creating natural shade and reducing algae growth. The dangling roots provide hiding places for fish and fry. This plant is excellent for guppy tanks, as it mimics their natural habitat and helps maintain water quality.",
     art: "water-lettuce",
+    image: "/images/plants/water-lettuce.jpg",
     careInformation: {
       lighting: "Moderate to High — requires good lighting to thrive",
       growth: "Fast — reproduces quickly through offshoots",
@@ -136,6 +142,7 @@ export const plants: Plant[] = [
     description:
       "Duckweed is one of the smallest flowering plants, forming a dense green carpet on the aquarium surface. While it grows prolifically, it provides numerous benefits including nutrient absorption, water quality improvement, and natural shade. The tiny plants create a natural environment that guppies enjoy, though growth should be monitored to prevent complete surface coverage that could block light to lower plants.",
     art: "duckweed",
+    image: "/images/plants/duckweed.jpg",
     careInformation: {
       lighting: "Low to High — grows in various conditions",
       growth: "Very Fast — doubles population rapidly",

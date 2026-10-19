@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowLeft, ArrowRight, Lightbulb, TrendingUp, Droplet, Anchor, Leaf } from "lucide-react";
-import PlantArt from "@/components/art/PlantArt";
 import Reveal from "@/components/ui/Reveal";
 import WhatsAppButton from "@/components/ui/WhatsAppButton";
 import { getPlantBySlug, getRelatedPlants, plants } from "@/lib/plants-data";
@@ -24,9 +24,9 @@ export async function generateMetadata({ params }: PlantPageProps): Promise<Meta
   }
 
   return {
-    title: `${plant.name} — Live Aquatic Plant`,
+    title: `${plant.name} — Live Aquatic Plant | Sheferoy Guppy`,
     description: plant.shortDescription,
-    keywords: [plant.name, plant.scientificName, "aquarium plant", "live aquatic plant"]
+    keywords: [plant.name, plant.scientificName, "aquarium plant", "live aquatic plant", "Sheferoy Guppy"]
       .filter(Boolean) as string[],
     alternates: { canonical: `/plants/${plant.slug}` },
     openGraph: {
@@ -59,46 +59,55 @@ export default async function PlantDetailPage({ params }: PlantPageProps) {
   return (
     <>
       {/* Breadcrumb */}
-      <div className="border-b border-white/5 bg-obsidian">
+      <div className="border-b border-border bg-page">
         <div className="mx-auto flex max-w-site items-center gap-3 px-4 py-4 sm:px-6 lg:px-10">
           <Link
             href="/plants"
-            className="inline-flex items-center gap-2 font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-ivory/50 transition-colors hover:text-moss-light"
+            className="inline-flex items-center gap-2 font-sans text-xs font-semibold uppercase tracking-wider text-muted transition-colors hover:text-brand"
           >
             <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
             All plants
           </Link>
-          <span className="text-ivory/20" aria-hidden="true">
+          <span className="text-border" aria-hidden="true">
             /
           </span>
-          <span className="font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-ivory/80">
+          <span className="font-sans text-xs font-semibold uppercase tracking-wider text-heading">
             {plant.name}
           </span>
         </div>
       </div>
 
-      <section className="bg-obsidian pb-20 pt-10 lg:pt-14">
+      <section className="bg-page pb-20 pt-10 lg:pt-14">
         <div className="mx-auto grid max-w-site gap-12 px-4 sm:px-6 lg:grid-cols-12 lg:gap-10 lg:px-10">
-          {/* Art panel */}
+          {/* Specimen Photography panel */}
           <Reveal className="lg:col-span-6">
-            <div className="relative overflow-hidden rounded-3xl border border-moss/25 bg-gradient-to-b from-[#0e1a15] to-obsidian">
-              <div
-                className="absolute inset-0 bg-[radial-gradient(75%_75%_at_50%_45%,rgba(95,158,110,0.18)_0%,rgba(9,11,13,0)_70%)]"
-                aria-hidden="true"
-              />
-              <PlantArt type={plant.art} className="relative left-1/2 h-auto w-[68%] -translate-x-1/2" />
+            <div className="group relative overflow-hidden rounded-3xl border border-border bg-surface shadow-card">
+              <div className="relative aspect-[4/3] w-full overflow-hidden bg-secondary">
+                <Image
+                  src={plant.image}
+                  alt={plant.name}
+                  fill
+                  priority
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
+                <div
+                  className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"
+                  aria-hidden="true"
+                />
+              </div>
               <div className="absolute left-5 top-5">
-                <span className="chip border-moss/40 text-moss-light">
-                  <Leaf className="h-3 w-3" aria-hidden="true" />
-                  Live plant
+                <span className="rounded-full border border-border/80 bg-surface/90 px-3 py-1 font-sans text-xs font-semibold uppercase tracking-wider text-brand backdrop-blur-md shadow-sm">
+                  <Leaf className="inline h-3.5 w-3.5 mr-1 text-success" aria-hidden="true" />
+                  Live Aquatic Botanical
                 </span>
               </div>
-              <div className="flex items-center justify-between border-t border-white/10 px-5 py-4">
-                <p className="font-sans text-[10px] uppercase tracking-[0.22em] text-ivory/45">
-                  Botanical illustration
+              <div className="flex items-center justify-between border-t border-border bg-secondary/70 px-5 py-4">
+                <p className="font-sans text-xs uppercase tracking-wider text-brand font-semibold">
+                  Authentic Botanical Photography
                 </p>
-                <p className="font-sans text-[10px] uppercase tracking-[0.22em] text-ivory/45">
-                  Photography available on request
+                <p className="font-sans text-xs uppercase tracking-wider text-muted">
+                  Conditioned in Balanced Water
                 </p>
               </div>
             </div>
@@ -107,29 +116,29 @@ export default async function PlantDetailPage({ params }: PlantPageProps) {
           {/* Details */}
           <div className="lg:col-span-6 lg:pl-6">
             <Reveal delay={100}>
-              <p className="font-sans text-[11px] font-semibold uppercase tracking-editorial text-moss-light">
+              <p className="font-sans text-xs font-semibold uppercase tracking-wider text-brand">
                 Botanical Collection
               </p>
-              <h1 className="display-2 mt-3 text-ivory">{plant.name}</h1>
+              <h1 className="mt-3 font-display text-3xl font-bold tracking-tight text-heading sm:text-4xl">{plant.name}</h1>
               {plant.scientificName && (
-                <p className="mt-2 font-display text-xl italic text-moss-light/75">{plant.scientificName}</p>
+                <p className="mt-2 font-display text-lg italic text-brand/80">{plant.scientificName}</p>
               )}
-              <p className="mt-5 text-base leading-relaxed text-mist">{plant.description}</p>
+              <p className="mt-4 text-base leading-relaxed text-body">{plant.description}</p>
             </Reveal>
 
             {careRows.length > 0 && (
               <Reveal delay={180} className="mt-8">
-                <div className="rounded-2xl border border-moss/25 bg-[#0d1613] p-6">
-                  <h2 className="font-display text-xl text-ivory">Care requirements</h2>
+                <div className="rounded-2xl border border-border bg-surface p-6 shadow-sm">
+                  <h2 className="font-display text-xl font-bold text-heading">Care requirements</h2>
                   <dl className="mt-5 space-y-4">
                     {careRows.map((row) => (
                       <div key={row.label} className="flex items-start gap-4">
-                        <row.icon className="mt-0.5 h-5 w-5 shrink-0 text-moss-light" aria-hidden="true" />
+                        <row.icon className="mt-0.5 h-5 w-5 shrink-0 text-brand" aria-hidden="true" />
                         <div>
-                          <dt className="font-sans text-[10px] font-semibold uppercase tracking-[0.18em] text-ivory/50">
+                          <dt className="font-sans text-[10px] font-semibold uppercase tracking-[0.18em] text-muted">
                             {row.label}
                           </dt>
-                          <dd className="mt-0.5 text-sm leading-relaxed text-ivory/90">{row.value}</dd>
+                          <dd className="mt-0.5 text-sm leading-relaxed text-heading font-medium">{row.value}</dd>
                         </div>
                       </div>
                     ))}
@@ -140,12 +149,12 @@ export default async function PlantDetailPage({ params }: PlantPageProps) {
 
             {plant.aquariumUses && plant.aquariumUses.length > 0 && (
               <Reveal delay={240} className="mt-6">
-                <div className="rounded-2xl border border-moss/25 bg-[#0d1613] p-6">
-                  <h2 className="font-display text-xl text-ivory">Aquarium uses</h2>
+                <div className="rounded-2xl border border-border bg-surface p-6 shadow-sm">
+                  <h2 className="font-display text-xl font-bold text-heading">Aquarium uses</h2>
                   <ul className="mt-4 grid gap-2.5 sm:grid-cols-2">
                     {plant.aquariumUses.map((use) => (
-                      <li key={use} className="flex items-start gap-2.5 text-sm leading-relaxed text-ivory/85">
-                        <Leaf className="mt-0.5 h-4 w-4 shrink-0 text-moss" aria-hidden="true" />
+                      <li key={use} className="flex items-start gap-2.5 text-sm leading-relaxed text-body">
+                        <Leaf className="mt-0.5 h-4 w-4 shrink-0 text-success" aria-hidden="true" />
                         {use}
                       </li>
                     ))}
@@ -155,10 +164,10 @@ export default async function PlantDetailPage({ params }: PlantPageProps) {
             )}
 
             <Reveal delay={300} className="mt-8">
-              <WhatsAppButton variety={`${plant.name} plant`} variant="moss" className="w-full justify-center py-4">
+              <WhatsAppButton variety={`${plant.name} plant`} className="w-full justify-center py-4 bg-brand hover:bg-brand-hover text-white shadow-md">
                 Enquire about {plant.name}
               </WhatsAppButton>
-              <p className="mt-4 text-center font-sans text-[10px] uppercase tracking-[0.22em] text-ivory/40">
+              <p className="mt-4 text-center font-sans text-[10px] uppercase tracking-[0.22em] text-muted">
                 Availability confirmed personally during enquiry
               </p>
             </Reveal>
@@ -168,13 +177,13 @@ export default async function PlantDetailPage({ params }: PlantPageProps) {
 
       {/* Related */}
       {related.length > 0 && (
-        <section className="border-t border-white/5 bg-abyss py-16 lg:py-20" aria-labelledby="related-plants-heading">
+        <section className="border-t border-border bg-secondary/40 py-16 lg:py-20" aria-labelledby="related-plants-heading">
           <div className="mx-auto max-w-site px-4 sm:px-6 lg:px-10">
             <div className="flex items-end justify-between gap-6">
-              <h2 id="related-plants-heading" className="display-3 text-ivory">
+              <h2 id="related-plants-heading" className="font-display text-2xl font-bold tracking-tight text-heading sm:text-3xl">
                 More from the botanical collection
               </h2>
-              <Link href="/plants" className="btn-link shrink-0">
+              <Link href="/plants" className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-brand hover:text-brand-hover">
                 View all
                 <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
               </Link>
@@ -185,20 +194,23 @@ export default async function PlantDetailPage({ params }: PlantPageProps) {
                 <Reveal key={item.id} delay={i * 100}>
                   <Link
                     href={`/plants/${item.slug}`}
-                    className="group relative block overflow-hidden rounded-2xl border border-moss/20 bg-[#0d1613] transition-all duration-500 ease-luxe hover:border-moss-light/40"
+                    className="group relative block overflow-hidden rounded-2xl border border-border bg-surface shadow-card hover:shadow-card-hover transition-all duration-300"
                   >
-                    <div className="relative">
-                      <PlantArt
-                        type={item.art}
-                        className="relative left-1/2 h-auto w-[58%] -translate-x-1/2 transition-transform duration-700 ease-luxe group-hover:scale-[1.05]"
+                    <div className="relative aspect-[4/3] w-full overflow-hidden bg-secondary">
+                      <Image
+                        src={item.image}
+                        alt={item.name}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        sizes="(max-width: 640px) 100vw, 33vw"
                       />
                     </div>
-                    <div className="p-5 pt-0">
-                      <h3 className="font-display text-2xl text-ivory transition-colors group-hover:text-moss-light">
+                    <div className="p-5">
+                      <h3 className="font-display text-lg font-bold text-heading transition-colors group-hover:text-brand">
                         {item.name}
                       </h3>
                       {item.scientificName && (
-                        <p className="mt-0.5 font-display text-sm italic text-moss-light/60">
+                        <p className="mt-0.5 text-xs italic text-brand/70">
                           {item.scientificName}
                         </p>
                       )}

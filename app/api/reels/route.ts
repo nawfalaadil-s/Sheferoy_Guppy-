@@ -20,6 +20,8 @@ const reelCreateSchema = z.object({
   varietyName: z.string().optional(),
   varietySlug: z.string().optional(),
   featured: z.boolean().default(false),
+  videoUrl: z.string().optional(),
+  thumbnailUrl: z.string().optional(),
 });
 
 const reelUpdateSchema = z.object({
@@ -31,6 +33,8 @@ const reelUpdateSchema = z.object({
   varietySlug: z.string().optional(),
   featured: z.boolean().optional(),
   order: z.number().int().optional(),
+  videoUrl: z.string().optional(),
+  thumbnailUrl: z.string().optional(),
 });
 
 export async function GET() {
@@ -99,6 +103,8 @@ export async function POST(request: Request) {
       order: 1, // new reel placed at the top
       date: new Date().toISOString().split("T")[0],
       author: "sheferoyguppy",
+      videoUrl: parsed.data.videoUrl || undefined,
+      thumbnailUrl: parsed.data.thumbnailUrl || undefined,
     };
 
     // Increment orders of existing items

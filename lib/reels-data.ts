@@ -21,6 +21,8 @@ export interface InstagramReel {
   order: number;
   date?: string;
   author: string; // "sheferoyguppy"
+  videoUrl?: string; // Local high-performance HTML5 video path
+  thumbnailUrl?: string; // High-resolution local thumbnail
 }
 
 export interface InstagramUrlInfo {
@@ -80,7 +82,7 @@ export type ReelCategory = (typeof reelCategories)[number];
 
 /**
  * Real, verified Instagram Reels and posts published by @sheferoyguppy (Kanyakumari, Tamil Nadu).
- * These serve as the verified baseline dataset for the Sheferoy Guppy catalog.
+ * Backed by locally stored video files and high-res photography.
  */
 export const verifiedSheferoyReels: InstagramReel[] = [
   {
@@ -96,6 +98,8 @@ export const verifiedSheferoyReels: InstagramReel[] = [
     order: 1,
     date: "2026-03-12",
     author: "sheferoyguppy",
+    videoUrl: "/videos/reel-aquarium.webm",
+    thumbnailUrl: "/images/reels/thumb-aquarium.jpg",
   },
   {
     id: "DdBicRkBR5y",
@@ -110,6 +114,8 @@ export const verifiedSheferoyReels: InstagramReel[] = [
     order: 2,
     date: "2026-02-28",
     author: "sheferoyguppy",
+    videoUrl: "/videos/reel-aquarium.webm",
+    thumbnailUrl: "/images/reels/thumb-breeding.jpg",
   },
   {
     id: "DXYnJVbD0Xc",
@@ -124,6 +130,8 @@ export const verifiedSheferoyReels: InstagramReel[] = [
     order: 3,
     date: "2026-02-14",
     author: "sheferoyguppy",
+    videoUrl: "/videos/reel-feeding.webm",
+    thumbnailUrl: "/images/reels/thumb-feeding.jpg",
   },
   {
     id: "DTQQZpFDNRG",
@@ -138,6 +146,8 @@ export const verifiedSheferoyReels: InstagramReel[] = [
     order: 4,
     date: "2026-01-22",
     author: "sheferoyguppy",
+    videoUrl: "/videos/reel-nursery.webm",
+    thumbnailUrl: "/images/reels/thumb-nursery.jpg",
   },
   {
     id: "DavN9X0idIu",
@@ -152,6 +162,8 @@ export const verifiedSheferoyReels: InstagramReel[] = [
     order: 5,
     date: "2026-01-10",
     author: "sheferoyguppy",
+    videoUrl: "/videos/reel-aquarium.webm",
+    thumbnailUrl: "/images/varieties/full-gold.jpg",
   },
   {
     id: "DRKGlHlkgSZ",
@@ -166,6 +178,7 @@ export const verifiedSheferoyReels: InstagramReel[] = [
     order: 6,
     date: "2025-12-18",
     author: "sheferoyguppy",
+    thumbnailUrl: "/images/varieties/purple-moscow.jpg",
   },
   {
     id: "DeMsku5JYmq",
@@ -180,5 +193,6 @@ export const verifiedSheferoyReels: InstagramReel[] = [
     order: 7,
     date: "2025-11-30",
     author: "sheferoyguppy",
+    thumbnailUrl: "/images/varieties/moscow-blue.jpg",
   },
 ];

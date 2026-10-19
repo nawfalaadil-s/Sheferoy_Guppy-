@@ -11,7 +11,9 @@
     "featured": true,
     "order": 1,
     "date": "2026-03-12",
-    "author": "sheferoyguppy"
+    "author": "sheferoyguppy",
+    "videoUrl": "/videos/reel-aquarium.webm",
+    "thumbnailUrl": "/images/reels/thumb-aquarium.jpg"
   },
   {
     "id": "DdBicRkBR5y",
@@ -25,7 +27,9 @@
     "featured": true,
     "order": 2,
     "date": "2026-02-28",
-    "author": "sheferoyguppy"
+    "author": "sheferoyguppy",
+    "videoUrl": "/videos/reel-aquarium.webm",
+    "thumbnailUrl": "/images/reels/thumb-breeding.jpg"
   },
   {
     "id": "DXYnJVbD0Xc",
@@ -39,7 +43,9 @@
     "featured": true,
     "order": 3,
     "date": "2026-02-14",
-    "author": "sheferoyguppy"
+    "author": "sheferoyguppy",
+    "videoUrl": "/videos/reel-feeding.webm",
+    "thumbnailUrl": "/images/reels/thumb-feeding.jpg"
   },
   {
     "id": "DTQQZpFDNRG",
@@ -53,7 +59,9 @@
     "featured": true,
     "order": 4,
     "date": "2026-01-22",
-    "author": "sheferoyguppy"
+    "author": "sheferoyguppy",
+    "videoUrl": "/videos/reel-nursery.webm",
+    "thumbnailUrl": "/images/reels/thumb-nursery.jpg"
   },
   {
     "id": "DavN9X0idIu",
@@ -67,7 +75,9 @@
     "featured": false,
     "order": 5,
     "date": "2026-01-10",
-    "author": "sheferoyguppy"
+    "author": "sheferoyguppy",
+    "videoUrl": "/videos/reel-aquarium.webm",
+    "thumbnailUrl": "/images/varieties/full-gold.jpg"
   },
   {
     "id": "DRKGlHlkgSZ",
@@ -81,7 +91,8 @@
     "featured": false,
     "order": 6,
     "date": "2025-12-18",
-    "author": "sheferoyguppy"
+    "author": "sheferoyguppy",
+    "thumbnailUrl": "/images/varieties/purple-moscow.jpg"
   },
   {
     "id": "DeMsku5JYmq",
@@ -95,6 +106,7 @@
     "featured": false,
     "order": 7,
     "date": "2025-11-30",
-    "author": "sheferoyguppy"
+    "author": "sheferoyguppy",
+    "thumbnailUrl": "/images/varieties/moscow-blue.jpg"
   }
 ]
