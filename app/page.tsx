@@ -1,5 +1,6 @@
 import Hero from "@/components/home/Hero";
 import FeaturedVarieties from "@/components/home/FeaturedVarieties";
+import FarmVideoSpotlight from "@/components/home/FarmVideoSpotlight";
 import ContactCTA from "@/components/home/ContactCTA";
 
 export default function HomePage() {
@@ -7,6 +8,7 @@ export default function HomePage() {
     <>
       <Hero />
       <FeaturedVarieties />
+      <FarmVideoSpotlight />
       <ContactCTA />
     </>
   );
