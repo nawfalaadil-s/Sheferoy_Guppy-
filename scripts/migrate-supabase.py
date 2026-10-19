@@ -1,7 +1,8 @@
+import os
 import psycopg2
 import json
 
-DB_URL = "postgresql://postgres:Elite07guppyss@db.ifvmvinxctcognyhwbot.supabase.co:5432/postgres"
+DB_URL = os.environ.get("DATABASE_URL", "")
 
 def run_migration():
     print("Connecting to Supabase PostgreSQL...")
