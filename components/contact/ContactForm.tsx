@@ -33,8 +33,17 @@ export default function ContactForm() {
     setErrorMessage("");
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1200));
-      console.log("Form data:", data);
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      const json = await res.json();
+
+      if (!res.ok || !json.success) {
+        throw new Error(json.error || "Failed to submit enquiry");
+      }
 
       setSubmitStatus("success");
       reset();
@@ -42,10 +51,14 @@ export default function ContactForm() {
       setTimeout(() => {
         setSubmitStatus("idle");
       }, 5000);
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Submission error:", error);
       setSubmitStatus("error");
-      setErrorMessage("Failed to send message. Please try again or contact us on WhatsApp.");
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Failed to send message. Please try again or contact us on WhatsApp.";
+      setErrorMessage(message);
     }
   };
 
