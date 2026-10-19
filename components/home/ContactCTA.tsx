@@ -45,6 +45,14 @@ export default function ContactCTA() {
               <Phone className="h-3.5 w-3.5 text-brand" aria-hidden="true" />
               Call 7358612156
             </a>
+
+            <a
+              href="mailto:eliteguppyss@gmail.com"
+              className="btn-secondary text-xs px-5 py-2 shadow-subtle hover:border-brand hover:text-brand"
+              aria-label="Email Sheferoy Guppy at eliteguppyss@gmail.com"
+            >
+              Email Us
+            </a>
           </div>
         </div>
       </div>
