@@ -1,6 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   FileEdit,
   Video,
@@ -8,10 +10,27 @@ import {
   ExternalLink,
   ShieldCheck,
   ArrowRight,
+  LogOut,
+  Loader2,
 } from "lucide-react";
 import PageHeader from "@/components/layout/PageHeader";
 
 export default function AdminHubPage() {
+  const router = useRouter();
+  const [loggingOut, setLoggingOut] = useState(false);
+
+  const handleLogout = async () => {
+    setLoggingOut(true);
+    try {
+      await fetch("/api/admin/logout", { method: "POST" });
+      router.push("/admin/login");
+      router.refresh();
+    } catch {
+      router.push("/admin/login");
+    } finally {
+      setLoggingOut(false);
+    }
+  };
   return (
     <div className="bg-page min-h-screen pb-20">
       <PageHeader
@@ -43,15 +62,27 @@ export default function AdminHubPage() {
             </div>
           </div>
 
-          <Link
-            href="/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-page px-4 py-2 text-xs font-semibold text-heading hover:border-brand hover:text-brand transition-colors"
-          >
-            <span>View Live Website</span>
-            <ExternalLink className="h-3.5 w-3.5" />
-          </Link>
+          <div className="flex items-center gap-2">
+            <Link
+              href="/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-page px-3.5 py-2 text-xs font-semibold text-heading hover:border-brand hover:text-brand transition-colors"
+            >
+              <span>View Website</span>
+              <ExternalLink className="h-3.5 w-3.5" />
+            </Link>
+
+            <button
+              onClick={handleLogout}
+              disabled={loggingOut}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-page px-3.5 py-2 text-xs font-semibold text-red-600 hover:bg-red-50 hover:border-red-200 transition-colors disabled:opacity-50"
+              title="Sign out of Admin Console"
+            >
+              {loggingOut ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <LogOut className="h-3.5 w-3.5" />}
+              <span>Log Out</span>
+            </button>
+          </div>
         </div>
 
         {/* 3 Core Admin Modules Grid */}
