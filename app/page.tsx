@@ -4,6 +4,9 @@ import FeaturedVarieties from "@/components/home/FeaturedVarieties";
 import AboutSection from "@/components/home/AboutSection";
 import SeoContentSection from "@/components/home/SeoContentSection";
 import ContactCTA from "@/components/home/ContactCTA";
+import { getHomepageContent } from "@/lib/cms-service";
+
+export const revalidate = 0;
 
 export const metadata: Metadata = {
   title: "Sheferoy Guppy | Ornamental Guppies & Bettas",
@@ -18,14 +21,16 @@ export const metadata: Metadata = {
   },
 };
 
-export default function HomePage() {
+export default async function HomePage() {
+  const content = await getHomepageContent();
+
   return (
     <>
-      <Hero />
-      <FeaturedVarieties />
-      <AboutSection />
-      <SeoContentSection />
-      <ContactCTA />
+      <Hero content={content.hero} />
+      <FeaturedVarieties content={content.featured} />
+      <AboutSection content={content.about} />
+      <SeoContentSection content={content.seo} />
+      <ContactCTA content={content.contact} />
     </>
   );
 }

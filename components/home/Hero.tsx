@@ -3,8 +3,27 @@
 import Link from "next/link";
 import Image from "next/image";
 import { MessageCircle, ArrowDown } from "lucide-react";
+import type { HeroContent } from "@/lib/cms-types";
 
-export default function Hero() {
+interface HeroProps {
+  content?: HeroContent;
+}
+
+export default function Hero({ content }: HeroProps) {
+  const badge = content?.badge || "ORNAMENTAL GUPPIES & BETTAS";
+  const title =
+    content?.title ||
+    "Premium Ornamental Guppies and Bettas for Aquarium Enthusiasts";
+  const description =
+    content?.description ||
+    "Welcome to Sheferoy Guppy, your destination for ornamental guppies, colourful bettas, and selected breeding pairs. Explore distinctive fish varieties featuring beautiful colours, patterns, and fin types. Whether you are choosing fish for your home aquarium or looking for breeding pairs, discover our collection and contact us directly for current availability and pricing.";
+  const primaryBtnText = content?.primaryBtnText || "Explore Featured Fish";
+  const primaryBtnLink = content?.primaryBtnLink || "#featured-fish";
+  const secondaryBtnText = content?.secondaryBtnText || "WhatsApp Enquiry";
+  const image = content?.image || "/images/varieties/veiltail-zebra-green.jpg";
+  const imageTitle = content?.imageTitle || "Veiltail Zebra Green";
+  const imageSubtitle = content?.imageSubtitle || "Ornamental guppy variety";
+
   const whatsappUrl = `https://wa.me/919489184047?text=${encodeURIComponent(
     "Hi Sheferoy Guppy, I am interested in your ornamental guppies, bettas, and breeding pairs. Please share current availability and pricing."
   )}`;
@@ -19,27 +38,27 @@ export default function Hero() {
           {/* Left Column: Business-focused hero copy */}
           <div className="lg:col-span-7 xl:col-span-7">
             <span className="font-sans text-xs font-bold uppercase tracking-wider text-brand">
-              ORNAMENTAL GUPPIES &amp; BETTAS
+              {badge}
             </span>
 
             <h1
               id="hero-heading"
               className="mt-3 font-display text-3xl font-extrabold tracking-tight text-heading sm:text-4xl lg:text-5xl leading-[1.15]"
             >
-              Premium Ornamental Guppies and Bettas for Aquarium Enthusiasts
+              {title}
             </h1>
 
             <p className="mt-4 text-sm leading-relaxed text-body sm:text-base">
-              Welcome to Sheferoy Guppy, your destination for ornamental guppies, colourful bettas, and selected breeding pairs. Explore distinctive fish varieties featuring beautiful colours, patterns, and fin types. Whether you are choosing fish for your home aquarium or looking for breeding pairs, discover our collection and contact us directly for current availability and pricing.
+              {description}
             </p>
 
             {/* Actions */}
             <div className="mt-6 flex flex-wrap items-center gap-3">
               <Link
-                href="#featured-fish"
+                href={primaryBtnLink}
                 className="btn-primary text-xs sm:text-sm px-5 py-2.5 shadow-teal"
               >
-                Explore Featured Fish
+                {primaryBtnText}
                 <ArrowDown className="h-3.5 w-3.5 ml-1" />
               </Link>
 
@@ -50,7 +69,7 @@ export default function Hero() {
                 className="btn-secondary text-xs sm:text-sm px-5 py-2.5 shadow-subtle hover:border-brand"
               >
                 <MessageCircle className="h-4 w-4 text-brand" />
-                WhatsApp Enquiry
+                {secondaryBtnText}
               </a>
             </div>
           </div>
@@ -60,8 +79,8 @@ export default function Hero() {
             <div className="relative overflow-hidden rounded-2xl border border-border bg-white shadow-card">
               <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-900">
                 <Image
-                  src="/images/varieties/veiltail-zebra-green.jpg"
-                  alt="Veiltail Zebra Green ornamental guppy at Sheferoy Guppy"
+                  src={image}
+                  alt={`${imageTitle} at Sheferoy Guppy`}
                   fill
                   priority
                   sizes="(max-width: 768px) 100vw, 40vw"
@@ -69,8 +88,8 @@ export default function Hero() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-charcoal/60 via-transparent to-transparent" />
                 <div className="absolute bottom-3 left-4 right-4 text-white">
-                  <p className="font-display font-bold text-sm">Veiltail Zebra Green</p>
-                  <p className="text-[11px] text-white/80">Ornamental guppy variety</p>
+                  <p className="font-display font-bold text-sm">{imageTitle}</p>
+                  <p className="text-[11px] text-white/80">{imageSubtitle}</p>
                 </div>
               </div>
             </div>

@@ -205,6 +205,15 @@ export default function Header() {
                 >
                   Call: 7358612156
                 </a>
+                <div className="pt-2 text-center">
+                  <Link
+                    href="/admin"
+                    onClick={closeMenu}
+                    className="text-[11px] text-muted hover:text-brand transition-colors"
+                  >
+                    Admin Console
+                  </Link>
+                </div>
               </div>
             </div>
           </div>

@@ -1,10 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { MessageCircle, ArrowRight } from "lucide-react";
-import { varieties, type Variety } from "@/lib/varieties-data";
+import { varieties } from "@/lib/varieties-data";
+import type { FeaturedSectionContent } from "@/lib/cms-types";
 
-// Exactly the five featured products requested for the homepage
-const FEATURED_SLUGS = [
+interface FeaturedVarietiesProps {
+  content?: FeaturedSectionContent;
+}
+
+const DEFAULT_FEATURED_SLUGS = [
   "veiltail-zebra-green",
   "24k-gold-guppy",
   "moscow-blue",
@@ -12,35 +16,47 @@ const FEATURED_SLUGS = [
   "purple-berry-dragon-dumbo-ear",
 ];
 
-export default function FeaturedVarieties() {
-  // Filter the existing varieties data for the 5 target products without modifying underlying catalog
-  const featuredItems: Variety[] = FEATURED_SLUGS.map((slug) => {
-    const item = varieties.find((v) => v.slug === slug);
-    if (item) {
-      // Use exact requested casing for 24K Gold Guppy
-      const displayName = item.slug === "24k-gold-guppy" ? "24K Gold Guppy" : item.name;
-      return { ...item, name: displayName };
-    }
-    // Fallback if not found
-    return {
-      id: 999,
-      name: slug,
-      slug,
-      description: "",
-      category: "Guppies" as const,
-      careLevel: "Beginner" as const,
-      published: true,
-      featured: true,
-      availability: "Enquire for Availability",
-      line: "",
-      image: `/images/varieties/${slug}.jpg`,
-      tailType: "",
-      rarity: "Show Grade" as const,
-      temp: "24°C - 28°C",
-      ph: "7.0 - 7.8",
-      hardness: "10 - 15 dGH",
-    };
-  });
+export default function FeaturedVarieties({ content }: FeaturedVarietiesProps) {
+  const badge = content?.badge || "Selected Collection";
+  const heading = content?.heading || "Featured Ornamental Fish";
+  const subheading =
+    content?.subheading ||
+    "Explore selected guppy and betta varieties from Sheferoy Guppy.";
+
+  // Determine items: either customItems, or resolved productSlugs, or defaults
+  let displayItems: {
+    slug: string;
+    name: string;
+    category: "Guppies" | "Bettas";
+    image: string;
+    availability: string;
+  }[] = [];
+
+  if (content?.customItems && content.customItems.length > 0) {
+    displayItems = content.customItems;
+  } else {
+    const slugs = content?.productSlugs || DEFAULT_FEATURED_SLUGS;
+    displayItems = slugs.map((slug) => {
+      const found = varieties.find((v) => v.slug === slug);
+      if (found) {
+        const displayName = found.slug === "24k-gold-guppy" ? "24K Gold Guppy" : found.name;
+        return {
+          slug: found.slug,
+          name: displayName,
+          category: found.category,
+          image: found.image,
+          availability: "Enquire for Availability",
+        };
+      }
+      return {
+        slug,
+        name: slug.replace(/-/g, " "),
+        category: "Guppies",
+        image: `/images/varieties/${slug}.jpg`,
+        availability: "Enquire for Availability",
+      };
+    });
+  }
 
   return (
     <section
@@ -53,16 +69,16 @@ export default function FeaturedVarieties() {
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <span className="font-sans text-xs font-bold uppercase tracking-wider text-brand">
-              Selected Collection
+              {badge}
             </span>
             <h2
               id="featured-heading"
               className="mt-1 font-display text-2xl font-extrabold tracking-tight text-heading sm:text-3xl"
             >
-              Featured Ornamental Fish
+              {heading}
             </h2>
             <p className="mt-1.5 text-sm text-body sm:text-base">
-              Explore selected guppy and betta varieties from Sheferoy Guppy.
+              {subheading}
             </p>
           </div>
 
@@ -75,9 +91,9 @@ export default function FeaturedVarieties() {
           </Link>
         </div>
 
-        {/* Five Featured Products Grid */}
+        {/* Featured Products Grid */}
         <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 sm:gap-6">
-          {featuredItems.map((item) => {
+          {displayItems.map((item) => {
             const whatsappMessage = `Hi Sheferoy Guppy, I am interested in ${item.name}. Please share the current availability and price.`;
             const whatsappUrl = `https://wa.me/919489184047?text=${encodeURIComponent(
               whatsappMessage
@@ -117,7 +133,7 @@ export default function FeaturedVarieties() {
                     {/* Stock status */}
                     <p className="mt-1.5 flex items-center gap-1.5 font-sans text-xs font-semibold text-charcoal/80">
                       <span className="h-1.5 w-1.5 rounded-full bg-success shrink-0" />
-                      Enquire for Availability
+                      {item.availability}
                     </p>
                   </div>
 
