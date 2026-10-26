@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { ADMIN_COOKIE_NAME, verifyAdminToken } from "@/lib/admin-auth";
 import { getDbGalleryItems, saveDbGalleryItem, deleteDbGalleryItem } from "@/lib/database-service";
@@ -33,6 +34,13 @@ export async function POST(request: Request) {
     if (!result.success) {
       return NextResponse.json({ success: false, error: result.error }, { status: 500 });
     }
+
+    try {
+      revalidatePath("/gallery");
+    } catch (e) {
+      console.warn("revalidatePath error:", e);
+    }
+
     return NextResponse.json({ success: true, item: result.data });
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : "Error";
@@ -59,6 +67,13 @@ export async function DELETE(request: Request) {
     if (!result.success) {
       return NextResponse.json({ success: false, error: result.error }, { status: 500 });
     }
+
+    try {
+      revalidatePath("/gallery");
+    } catch (e) {
+      console.warn("revalidatePath error:", e);
+    }
+
     return NextResponse.json({ success: true });
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : "Error";

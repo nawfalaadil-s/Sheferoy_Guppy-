@@ -8,6 +8,7 @@ import WhatsAppButton from "@/components/ui/WhatsAppButton";
 import { getDbOffers } from "@/lib/database-service";
 import { getActiveOffers } from "@/lib/offers-data";
 
+export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export interface UnifiedOffer {

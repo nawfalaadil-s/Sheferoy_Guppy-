@@ -4,7 +4,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft, ArrowRight, Droplet, ThermometerSun, Waves, ShieldCheck, MessageCircle } from "lucide-react";
 import Reveal from "@/components/ui/Reveal";
-import { getVarietyBySlug, getRelatedVarieties, guppyVarieties } from "@/lib/varieties-data";
+import { getVarietyBySlug, getRelatedVarieties, guppyVarieties, type Variety } from "@/lib/varieties-data";
+import { getDbVarietyBySlug } from "@/lib/database-service";
+
+export const dynamicParams = true;
+export const revalidate = 0;
 
 interface VarietyPageProps {
   params: Promise<{ slug: string }>;
@@ -16,13 +20,14 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: VarietyPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const variety = getVarietyBySlug(slug);
+  const dbItem = await getDbVarietyBySlug(slug);
+  const variety = dbItem || getVarietyBySlug(slug);
 
   if (!variety) {
     return { title: "Variety Not Found" };
   }
 
-  const title = `${variety.name} Guppy — ${variety.line}`;
+  const title = `${variety.name} — ${variety.line || variety.category}`;
   return {
     title,
     description: variety.description,
@@ -43,11 +48,31 @@ const careBasics = {
 
 export default async function VarietyDetailPage({ params }: VarietyPageProps) {
   const { slug } = await params;
-  const variety = getVarietyBySlug(slug);
+  const dbItem = await getDbVarietyBySlug(slug);
+  const localItem = getVarietyBySlug(slug);
 
-  if (!variety) {
+  if (!dbItem && !localItem) {
     notFound();
   }
+
+  const variety: Variety = {
+    id: dbItem?.id ? Number(dbItem.id) : (localItem?.id || 1),
+    name: dbItem?.name || localItem?.name || slug,
+    slug: dbItem?.slug || localItem?.slug || slug,
+    line: dbItem?.line || localItem?.line || "Selected Breeder Bloodline",
+    category: (dbItem?.category || localItem?.category || "Guppies") as "Guppies" | "Bettas",
+    description: dbItem?.description || localItem?.description || "",
+    availability: dbItem?.availability || localItem?.availability || "Enquire for Availability",
+    careLevel: localItem?.careLevel || "Intermediate",
+    image: dbItem?.image || localItem?.image || "/images/varieties/veiltail-zebra-green.jpg",
+    published: dbItem ? (dbItem.published !== false) : (localItem?.published ?? true),
+    featured: dbItem ? Boolean(dbItem.is_popular) : (localItem?.featured ?? false),
+    tailType: localItem?.tailType || "Delta Tail",
+    rarity: localItem?.rarity || "Show Grade",
+    temp: localItem?.temp || "24°C - 28°C",
+    ph: localItem?.ph || "7.0 - 7.8",
+    hardness: localItem?.hardness || "10 - 15 dGH",
+  };
 
   const related = getRelatedVarieties(slug, 3);
 

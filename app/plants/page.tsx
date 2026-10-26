@@ -4,6 +4,7 @@ import PlantsClient, { type UnifiedPlant } from "@/components/plants/PlantsClien
 import { getDbPlants } from "@/lib/database-service";
 import { plants } from "@/lib/plants-data";
 
+export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export const metadata: Metadata = {

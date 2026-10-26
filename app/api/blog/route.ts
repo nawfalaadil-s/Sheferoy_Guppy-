@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { ADMIN_COOKIE_NAME, verifyAdminToken } from "@/lib/admin-auth";
 import { getDbBlogPosts, saveDbBlogPost, deleteDbBlogPost } from "@/lib/database-service";
@@ -33,6 +34,14 @@ export async function POST(request: Request) {
     if (!result.success) {
       return NextResponse.json({ success: false, error: result.error }, { status: 500 });
     }
+
+    try {
+      revalidatePath("/blog");
+      revalidatePath(`/blog/${body.slug}`);
+    } catch (e) {
+      console.warn("revalidatePath error:", e);
+    }
+
     return NextResponse.json({ success: true, post: result.data });
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : "Error";
@@ -59,6 +68,13 @@ export async function DELETE(request: Request) {
     if (!result.success) {
       return NextResponse.json({ success: false, error: result.error }, { status: 500 });
     }
+
+    try {
+      revalidatePath("/blog");
+    } catch (e) {
+      console.warn("revalidatePath error:", e);
+    }
+
     return NextResponse.json({ success: true });
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : "Error";

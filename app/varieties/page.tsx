@@ -5,6 +5,7 @@ import VarietiesClient from "@/components/varieties/VarietiesClient";
 import { getDbVarieties } from "@/lib/database-service";
 import { guppyVarieties, type Variety } from "@/lib/varieties-data";
 
+export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export const metadata: Metadata = {

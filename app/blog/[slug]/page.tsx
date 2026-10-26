@@ -4,7 +4,11 @@ import Link from "next/link";
 import { ArrowLeft, ArrowRight, Clock } from "lucide-react";
 import Reveal from "@/components/ui/Reveal";
 import WhatsAppButton from "@/components/ui/WhatsAppButton";
-import { getBlogPostBySlug, blogPosts } from "@/lib/blog-data";
+import { getBlogPostBySlug, blogPosts, type BlogPost } from "@/lib/blog-data";
+import { getDbBlogPostBySlug } from "@/lib/database-service";
+
+export const dynamicParams = true;
+export const revalidate = 0;
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
@@ -20,24 +24,26 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = getBlogPostBySlug(slug);
+  const dbPost = await getDbBlogPostBySlug(slug);
+  const post = dbPost || getBlogPostBySlug(slug);
 
   if (!post) {
     return { title: "Post Not Found" };
   }
 
+  const title = `${post.title} | Sheferoy Guppy`;
   return {
-    title: `${post.title} | Sheferoy Guppy`,
+    title,
     description: post.excerpt,
     keywords: [post.category, "guppy care", "aquarium", "fish breeding", "Sheferoy Guppy"],
-    authors: [{ name: post.author }],
+    authors: [{ name: post.author || "Sheferoy Guppy" }],
     alternates: { canonical: `/blog/${post.slug}` },
     openGraph: {
-      title: `${post.title} | Sheferoy Guppy`,
+      title,
       description: post.excerpt,
       type: "article",
-      publishedTime: post.publishedAt,
-      authors: [post.author],
+      publishedTime: "published_at" in post ? post.published_at : (post as BlogPost).publishedAt,
+      authors: [post.author || "Sheferoy Guppy"],
       url: `/blog/${post.slug}`,
     },
   };
@@ -116,11 +122,25 @@ function ArticleBody({ content }: { content: string }) {
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params;
-  const post = getBlogPostBySlug(slug);
+  const dbPost = await getDbBlogPostBySlug(slug);
+  const localPost = getBlogPostBySlug(slug);
 
-  if (!post) {
+  if (!dbPost && !localPost) {
     notFound();
   }
+
+  const post: BlogPost = {
+    id: dbPost?.id ? Number(dbPost.id) : (localPost?.id || 1),
+    title: dbPost?.title || localPost?.title || slug,
+    slug: dbPost?.slug || localPost?.slug || slug,
+    excerpt: dbPost?.excerpt || localPost?.excerpt || "",
+    content: dbPost?.content || localPost?.content || "",
+    category: dbPost?.category || localPost?.category || "Care Guides",
+    author: dbPost?.author || localPost?.author || "Sheferoy Guppy",
+    publishedAt: dbPost?.published_at || localPost?.publishedAt || new Date().toISOString().split("T")[0],
+    published: dbPost ? (dbPost.is_published !== false) : (localPost?.published ?? true),
+    readTime: dbPost?.read_time || localPost?.readTime || "5 min read",
+  };
 
   const relatedPosts = blogPosts
     .filter((p) => p.published && p.category === post.category && p.id !== post.id)

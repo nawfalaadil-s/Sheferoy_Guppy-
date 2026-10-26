@@ -4,6 +4,7 @@ import BlogClient, { type UnifiedBlogPost } from "@/components/blog/BlogClient";
 import { getDbBlogPosts } from "@/lib/database-service";
 import { blogPosts } from "@/lib/blog-data";
 
+export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export const metadata: Metadata = {

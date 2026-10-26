@@ -3,6 +3,11 @@ import Link from "next/link";
 import { MessageCircle, Phone } from "lucide-react";
 import PageHeader from "@/components/layout/PageHeader";
 import GalleryGrid from "@/components/gallery/GalleryGrid";
+import { getDbGalleryItems } from "@/lib/database-service";
+import { galleryItems as defaultGalleryItems, type GalleryItem } from "@/lib/gallery-data";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export const metadata: Metadata = {
   title: "Gallery — Hatchery Photography & Videos | Sheferoy Guppy",
@@ -16,7 +21,29 @@ export const metadata: Metadata = {
   },
 };
 
-export default function GalleryPage() {
+export default async function GalleryPage() {
+  let items: GalleryItem[] = defaultGalleryItems;
+  try {
+    const dbItems = await getDbGalleryItems(true);
+    if (dbItems && dbItems.length > 0) {
+      items = dbItems.map((rec) => ({
+        id: rec.id || Math.floor(Math.random() * 100000),
+        kind: rec.kind as "guppy" | "plant" | "video",
+        alt: rec.alt || "Sheferoy Guppy Specimen",
+        caption: rec.caption || "",
+        category: rec.category || "Guppies",
+        image: rec.image || "/images/gallery/fish-room-wide.jpg",
+        varietySlug: rec.variety_slug || "",
+        plantSlug: rec.plant_slug || "",
+        videoUrl: rec.video_url || "",
+        videoCategory: rec.video_category || "Farm Videos",
+        thumbnailUrl: rec.thumbnail_url || rec.image || "/images/gallery/fish-room-wide.jpg",
+      })) as GalleryItem[];
+    }
+  } catch {
+    items = defaultGalleryItems;
+  }
+
   return (
     <>
       <PageHeader
@@ -31,7 +58,7 @@ export default function GalleryPage() {
         }
         description="Authentic guppy bloodlines, hatchery videos, and botanical companions, presented in one place. Filter by category or select any exhibit to open the interactive viewer."
       />
-      <GalleryGrid />
+      <GalleryGrid initialItems={items} />
 
       <section className="border-t border-border bg-secondary/50 py-16 lg:py-20">
         <div className="mx-auto flex max-w-site flex-col items-center px-4 text-center sm:px-6 lg:px-10">

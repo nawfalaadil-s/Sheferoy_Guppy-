@@ -106,6 +106,20 @@ export async function getDbVarieties(publishedOnly = false): Promise<VarietyReco
   }
 }
 
+export async function getDbVarietyBySlug(slug: string): Promise<VarietyRecord | null> {
+  try {
+    const { data, error } = await supabase
+      .from("varieties")
+      .select("*")
+      .eq("slug", slug)
+      .maybeSingle();
+    if (!error && data) return data;
+  } catch (err) {
+    console.warn("getDbVarietyBySlug error:", err);
+  }
+  return null;
+}
+
 export async function saveDbVariety(record: VarietyRecord): Promise<{ success: boolean; data?: VarietyRecord; error?: string }> {
   try {
     const payload = {
@@ -150,6 +164,20 @@ export async function getDbPlants(publishedOnly = false): Promise<PlantRecord[]>
     console.warn("getDbPlants error:", err);
     return [];
   }
+}
+
+export async function getDbPlantBySlug(slug: string): Promise<PlantRecord | null> {
+  try {
+    const { data, error } = await supabase
+      .from("plants")
+      .select("*")
+      .eq("slug", slug)
+      .maybeSingle();
+    if (!error && data) return data;
+  } catch (err) {
+    console.warn("getDbPlantBySlug error:", err);
+  }
+  return null;
 }
 
 export async function saveDbPlant(record: PlantRecord): Promise<{ success: boolean; data?: PlantRecord; error?: string }> {
@@ -238,6 +266,20 @@ export async function getDbBlogPosts(publishedOnly = false): Promise<BlogPostRec
     console.warn("getDbBlogPosts error:", err);
     return [];
   }
+}
+
+export async function getDbBlogPostBySlug(slug: string): Promise<BlogPostRecord | null> {
+  try {
+    const { data, error } = await supabase
+      .from("blog_posts")
+      .select("*")
+      .eq("slug", slug)
+      .maybeSingle();
+    if (!error && data) return data;
+  } catch (err) {
+    console.warn("getDbBlogPostBySlug error:", err);
+  }
+  return null;
 }
 
 export async function saveDbBlogPost(record: BlogPostRecord): Promise<{ success: boolean; data?: BlogPostRecord; error?: string }> {

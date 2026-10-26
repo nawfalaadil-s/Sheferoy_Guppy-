@@ -13,18 +13,24 @@ import {
   MessageCircle,
 } from "lucide-react";
 import WhatsAppButton from "@/components/ui/WhatsAppButton";
-import { galleryItems, galleryCategories } from "@/lib/gallery-data";
+import { galleryItems as defaultGalleryItems, galleryCategories, type GalleryItem } from "@/lib/gallery-data";
 
-export default function GalleryGrid() {
+interface GalleryGridProps {
+  initialItems?: GalleryItem[];
+}
+
+export default function GalleryGrid({ initialItems }: GalleryGridProps) {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
+  const allItems = initialItems && initialItems.length > 0 ? initialItems : defaultGalleryItems;
 
   const filteredItems = useMemo(
     () =>
       selectedCategory === "All"
-        ? galleryItems
-        : galleryItems.filter((item) => item.category === selectedCategory),
-    [selectedCategory]
+        ? allItems
+        : allItems.filter((item) => item.category === selectedCategory),
+    [selectedCategory, allItems]
   );
 
   const closeLightbox = useCallback(() => setLightboxIndex(null), []);

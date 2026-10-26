@@ -5,7 +5,11 @@ import Image from "next/image";
 import { ArrowLeft, ArrowRight, Lightbulb, TrendingUp, Droplet, Anchor, Leaf } from "lucide-react";
 import Reveal from "@/components/ui/Reveal";
 import WhatsAppButton from "@/components/ui/WhatsAppButton";
-import { getPlantBySlug, getRelatedPlants, plants } from "@/lib/plants-data";
+import { getPlantBySlug, getRelatedPlants, plants, type Plant } from "@/lib/plants-data";
+import { getDbPlantBySlug } from "@/lib/database-service";
+
+export const dynamicParams = true;
+export const revalidate = 0;
 
 interface PlantPageProps {
   params: Promise<{ slug: string }>;
@@ -17,21 +21,25 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: PlantPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const plant = getPlantBySlug(slug);
+  const dbItem = await getDbPlantBySlug(slug);
+  const plant = dbItem || getPlantBySlug(slug);
 
   if (!plant) {
     return { title: "Plant Not Found" };
   }
 
+  const desc = "short_description" in plant ? plant.short_description : (plant as Plant).shortDescription;
+  const sci = "scientific_name" in plant ? plant.scientific_name : (plant as Plant).scientificName;
+
   return {
     title: `${plant.name} — Live Aquatic Plant | Sheferoy Guppy`,
-    description: plant.shortDescription,
-    keywords: [plant.name, plant.scientificName, "aquarium plant", "live aquatic plant", "Sheferoy Guppy"]
+    description: desc || "",
+    keywords: [plant.name, sci, "aquarium plant", "live aquatic plant", "Sheferoy Guppy"]
       .filter(Boolean) as string[],
     alternates: { canonical: `/plants/${plant.slug}` },
     openGraph: {
       title: `${plant.name} | Sheferoy Guppy`,
-      description: plant.shortDescription,
+      description: desc || "",
       url: `/plants/${plant.slug}`,
     },
   };
@@ -39,11 +47,30 @@ export async function generateMetadata({ params }: PlantPageProps): Promise<Meta
 
 export default async function PlantDetailPage({ params }: PlantPageProps) {
   const { slug } = await params;
-  const plant = getPlantBySlug(slug);
+  const dbItem = await getDbPlantBySlug(slug);
+  const localItem = getPlantBySlug(slug);
 
-  if (!plant) {
+  if (!dbItem && !localItem) {
     notFound();
   }
+
+  const plant: Plant = {
+    id: dbItem?.id || localItem?.id || slug,
+    name: dbItem?.name || localItem?.name || slug,
+    slug: dbItem?.slug || localItem?.slug || slug,
+    scientificName: dbItem?.scientific_name || localItem?.scientificName || "",
+    shortDescription: dbItem?.short_description || localItem?.shortDescription || "",
+    description: dbItem?.description || localItem?.description || "",
+    image: dbItem?.image || localItem?.image || "/images/plants/pennywort.jpg",
+    published: dbItem ? (dbItem.is_published !== false) : (localItem?.published ?? true),
+    careInformation: {
+      lighting: dbItem?.care_lighting || localItem?.careInformation?.lighting || "Moderate",
+      growth: dbItem?.care_growth || localItem?.careInformation?.growth || "Moderate",
+      difficulty: dbItem?.care_difficulty || localItem?.careInformation?.difficulty || "Easy",
+      placement: dbItem?.care_placement || localItem?.careInformation?.placement || "Midground",
+    },
+    aquariumUses: dbItem?.aquarium_uses || localItem?.aquariumUses || ["Community tanks", "Nitrate absorption"],
+  };
 
   const related = getRelatedPlants(slug, 3);
 
