@@ -9,9 +9,8 @@ import {
   ChevronRight,
   Leaf,
   Play,
-  Instagram,
-  ArrowUpRight,
   Sparkles,
+  MessageCircle,
 } from "lucide-react";
 import WhatsAppButton from "@/components/ui/WhatsAppButton";
 import { galleryItems, galleryCategories } from "@/lib/gallery-data";
@@ -78,7 +77,7 @@ export default function GalleryGrid() {
                       : "border-border text-body hover:border-brand/40 hover:text-brand bg-surface"
                   }`}
                 >
-                  {category === "Reels" ? "Instagram Video Reels" : category}
+                  {category}
                 </button>
               );
             })}
@@ -94,11 +93,11 @@ export default function GalleryGrid() {
         <div className="mx-auto max-w-site px-4 sm:px-6 lg:px-10">
           <ul className="grid grid-cols-2 gap-4 lg:grid-cols-4 lg:gap-6">
             {filteredItems.map((item, index) => {
-              const isReel = item.kind === "reel";
+              const isVideo = item.kind === "video";
               const photoSrc =
                 item.kind === "guppy" || item.kind === "plant"
                   ? item.image
-                  : item.thumbnailUrl || "/images/reels/thumb-aquarium.jpg";
+                  : item.thumbnailUrl || "/images/gallery/farm-clip-06.jpg";
 
               return (
                 <li key={item.id}>
@@ -119,8 +118,8 @@ export default function GalleryGrid() {
                     {/* Gradient Overlay for text readability */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
-                    {/* Reel Icon / Play Button */}
-                    {isReel && (
+                    {/* Video Icon / Play Button */}
+                    {isVideo && (
                       <div className="absolute inset-0 flex items-center justify-center">
                         <span className="flex h-12 w-12 items-center justify-center rounded-full border border-white/60 bg-brand/85 text-white shadow-md backdrop-blur-md transition-transform duration-300 group-hover:scale-110">
                           <Play className="ml-0.5 h-5 w-5 fill-current" />
@@ -131,18 +130,11 @@ export default function GalleryGrid() {
                     {/* Top Tag */}
                     <div className="absolute left-3 top-3">
                       <span className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-surface/90 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-heading backdrop-blur-md shadow-sm">
-                        {isReel ? (
-                          item.category === "Farm Videos" ? (
-                            <>
-                              <Play className="h-3 w-3 fill-current text-brand" />
-                              Farm Video
-                            </>
-                          ) : (
-                            <>
-                              <Instagram className="h-3 w-3 text-brand" />
-                              Reel
-                            </>
-                          )
+                        {isVideo ? (
+                          <>
+                            <Play className="h-3 w-3 fill-current text-brand" />
+                            Farm Video
+                          </>
                         ) : item.kind === "plant" ? (
                           <>
                             <Leaf className="h-3 w-3 text-success" />
@@ -173,22 +165,14 @@ export default function GalleryGrid() {
           <div className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 text-center sm:flex-row sm:text-left">
             <p className="text-xs text-muted">
               High-definition photographs and video clips filmed on location at Sheferoy Guppy Hatchery, Kanyakumari.
-              Also viewable on{" "}
-              <Link
-                href="https://www.instagram.com/sheferoyguppy/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-brand hover:text-brand-hover font-semibold"
-              >
-                @sheferoyguppy
-              </Link>.
             </p>
 
             <Link
-              href="/admin/reels"
-              className="text-xs font-semibold uppercase tracking-wider text-brand hover:text-brand-hover transition-colors font-sans"
+              href="/contact"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-brand hover:text-brand-hover transition-colors font-sans"
             >
-              Reel Management Console →
+              <MessageCircle className="h-3.5 w-3.5" />
+              <span>Contact Breeder for Live Stock Availability →</span>
             </Link>
           </div>
         </div>
@@ -240,12 +224,12 @@ export default function GalleryGrid() {
 
           {/* Lightbox Content Container */}
           <div className="relative z-10 mx-auto w-full max-w-2xl overflow-hidden rounded-3xl border border-border bg-surface shadow-2xl">
-            {currentItem.kind === "reel" ? (
+            {currentItem.kind === "video" ? (
               /* Native Local Video Player */
               <div>
                 <div className="aspect-[9/14] max-h-[65vh] w-full bg-black">
                   <video
-                    src={currentItem.videoUrl || "/videos/reel-aquarium.webm"}
+                    src={currentItem.videoUrl}
                     poster={currentItem.thumbnailUrl}
                     controls
                     autoPlay
@@ -256,41 +240,20 @@ export default function GalleryGrid() {
                 <div className="flex flex-col gap-3 p-5 sm:flex-row sm:items-center sm:justify-between bg-surface border-t border-border">
                   <div>
                     <span className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-brand">
-                      {currentItem.category === "Farm Videos" ? (
-                        <>
-                          <Play className="h-3.5 w-3.5 fill-current" />
-                          Sheferoy Farm Video • {currentItem.reelCategory}
-                        </>
-                      ) : (
-                        <>
-                          <Instagram className="h-3.5 w-3.5" />
-                          Instagram Reel • {currentItem.reelCategory}
-                        </>
-                      )}
+                      <Play className="h-3.5 w-3.5 fill-current" />
+                      Sheferoy Farm Video • {currentItem.videoCategory}
                     </span>
                     <h3 className="mt-1 font-display text-base font-bold text-heading">
                       {currentItem.caption}
                     </h3>
                   </div>
 
-                  {currentItem.category === "Farm Videos" ? (
-                    <WhatsAppButton
-                      variety={currentItem.caption}
-                      className="shrink-0 inline-flex items-center justify-center gap-1.5 rounded-xl bg-brand px-4 py-2.5 text-xs font-semibold text-white hover:bg-brand-hover shadow-sm transition-all"
-                    >
-                      Enquire on WhatsApp
-                    </WhatsAppButton>
-                  ) : (
-                    <Link
-                      href={currentItem.reelUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="shrink-0 inline-flex items-center justify-center gap-1.5 rounded-xl bg-brand px-4 py-2.5 text-xs font-semibold text-white hover:bg-brand-hover shadow-sm transition-all"
-                    >
-                      Watch on Instagram
-                      <ArrowUpRight className="h-3.5 w-3.5" />
-                    </Link>
-                  )}
+                  <WhatsAppButton
+                    variety={currentItem.caption}
+                    className="shrink-0 inline-flex items-center justify-center gap-1.5 rounded-xl bg-brand px-4 py-2.5 text-xs font-semibold text-white hover:bg-brand-hover shadow-sm transition-all"
+                  >
+                    Enquire on WhatsApp
+                  </WhatsAppButton>
                 </div>
               </div>
             ) : (

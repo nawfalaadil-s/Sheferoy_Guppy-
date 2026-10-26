@@ -7,23 +7,55 @@ import { Search, X } from "lucide-react";
 import WhatsAppButton from "@/components/ui/WhatsAppButton";
 import { plants } from "@/lib/plants-data";
 
-export default function PlantsClient() {
+export interface UnifiedPlant {
+  id?: string | number;
+  name: string;
+  slug: string;
+  scientific_name?: string;
+  scientificName?: string;
+  short_description?: string;
+  shortDescription?: string;
+  description: string;
+  careInformation?: {
+    lighting?: string;
+    growth?: string;
+    difficulty?: string;
+    placement?: string;
+  };
+  care_lighting?: string;
+  lighting?: string;
+  care_growth?: string;
+  growthRate?: string;
+  care_placement?: string;
+  placement?: string;
+  care_difficulty?: string;
+  image: string;
+  is_featured?: boolean;
+  featured?: boolean;
+  is_published?: boolean;
+  published?: boolean;
+}
+
+export default function PlantsClient({ initialPlants }: { initialPlants?: UnifiedPlant[] }) {
+  const allPlants = initialPlants && initialPlants.length > 0 ? initialPlants : plants;
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredPlants = useMemo(() => {
-    let filtered = plants.filter((p) => p.published);
+    let filtered = allPlants.filter((p) => p.published !== false && p.is_published !== false);
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       filtered = filtered.filter(
         (p) =>
           p.name.toLowerCase().includes(q) ||
-          p.scientificName?.toLowerCase().includes(q) ||
-          p.shortDescription.toLowerCase().includes(q) ||
-          p.description.toLowerCase().includes(q)
+          (p.scientificName && p.scientificName.toLowerCase().includes(q)) ||
+          (p.scientific_name && p.scientific_name.toLowerCase().includes(q)) ||
+          (p.shortDescription && p.shortDescription.toLowerCase().includes(q)) ||
+          (p.short_description && p.short_description.toLowerCase().includes(q)) ||
+          (p.description && p.description.toLowerCase().includes(q))
       );
     }
     return filtered;
-  }, [searchQuery]);
+  }, [searchQuery, allPlants]);
 
   return (
     <>
@@ -101,15 +133,15 @@ export default function PlantsClient() {
                         {plant.name}
                       </Link>
                     </h2>
-                    {plant.scientificName && (
-                      <p className="mt-1 text-xs italic text-brand/80">{plant.scientificName}</p>
+                    {(plant.scientificName || plant.scientific_name) && (
+                      <p className="mt-1 text-xs italic text-brand/80">{plant.scientificName || plant.scientific_name}</p>
                     )}
                     <p className="mt-3 line-clamp-2 flex-1 text-sm leading-relaxed text-body">
-                      {plant.shortDescription}
+                      {plant.shortDescription || plant.short_description || plant.description}
                     </p>
                     <div className="mt-5 flex items-center justify-between border-t border-border pt-4">
                       <span className="rounded-full border border-border bg-secondary px-3 py-1 font-sans text-[11px] font-semibold uppercase tracking-wider text-brand">
-                        {plant.careInformation?.difficulty.split("—")[0].trim() ?? "Live plant"}
+                        {plant.careInformation?.difficulty?.split("—")[0].trim() || plant.care_difficulty || "Live plant"}
                       </span>
                       <WhatsAppButton variety={plant.name} variant="link" className="text-xs font-semibold uppercase tracking-wider text-brand hover:text-brand-hover hover:underline">
                         Enquire

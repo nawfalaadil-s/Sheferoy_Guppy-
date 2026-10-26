@@ -6,10 +6,14 @@ export interface Offer {
   title: string;
   description: string;
   image?: string;
-  startDate: string | null;
-  endDate: string | null;
-  isActive: boolean;
-  isFeatured: boolean;
+  startDate?: string | null;
+  start_date?: string | null;
+  endDate?: string | null;
+  end_date?: string | null;
+  isActive?: boolean;
+  is_active?: boolean;
+  isFeatured?: boolean;
+  is_featured?: boolean;
 }
 
 export const offers: Offer[] = [

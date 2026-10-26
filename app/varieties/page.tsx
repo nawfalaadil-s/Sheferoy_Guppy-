@@ -2,6 +2,10 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import PageHeader from "@/components/layout/PageHeader";
 import VarietiesClient from "@/components/varieties/VarietiesClient";
+import { getDbVarieties } from "@/lib/database-service";
+import { guppyVarieties, type Variety } from "@/lib/varieties-data";
+
+export const revalidate = 0;
 
 export const metadata: Metadata = {
   title: "Ornamental Guppies & Bettas — Pure Bloodlines | Sheferoy Guppy",
@@ -17,7 +21,17 @@ export const metadata: Metadata = {
   },
 };
 
-export default function VarietiesPage() {
+export default async function VarietiesPage() {
+  let initialVarieties: Variety[] = guppyVarieties;
+  try {
+    const dbVarieties = await getDbVarieties(true);
+    if (dbVarieties && dbVarieties.length > 0) {
+      initialVarieties = dbVarieties as unknown as Variety[];
+    }
+  } catch {
+    initialVarieties = guppyVarieties;
+  }
+
   return (
     <>
       <PageHeader
@@ -38,7 +52,7 @@ export default function VarietiesPage() {
           </div>
         }
       >
-        <VarietiesClient />
+        <VarietiesClient initialVarieties={initialVarieties} />
       </Suspense>
     </>
   );

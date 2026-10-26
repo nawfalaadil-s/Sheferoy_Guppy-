@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import PageHeader from "@/components/layout/PageHeader";
-import PlantsClient from "@/components/plants/PlantsClient";
+import PlantsClient, { type UnifiedPlant } from "@/components/plants/PlantsClient";
+import { getDbPlants } from "@/lib/database-service";
+import { plants } from "@/lib/plants-data";
+
+export const revalidate = 0;
 
 export const metadata: Metadata = {
   title: "Live Aquatic Plants — Guppy Grass, Vallisneria & More | Sheferoy Guppy",
@@ -25,7 +29,17 @@ export const metadata: Metadata = {
   },
 };
 
-export default function PlantsPage() {
+export default async function PlantsPage() {
+  let initialPlants: UnifiedPlant[] = plants;
+  try {
+    const dbPlants = await getDbPlants(true);
+    if (dbPlants && dbPlants.length > 0) {
+      initialPlants = dbPlants;
+    }
+  } catch {
+    initialPlants = plants;
+  }
+
   return (
     <>
       <PageHeader
@@ -39,7 +53,7 @@ export default function PlantsPage() {
         }
         description="A considered collection of submerged and floating plants — chosen for guppy aquariums, easy care and natural water balance."
       />
-      <PlantsClient />
+      <PlantsClient initialPlants={initialPlants} />
     </>
   );
 }

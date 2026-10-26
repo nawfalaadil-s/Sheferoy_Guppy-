@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 const sections = [
   {
     heading: "Information We Collect",
-    intro: "When you contact us through our website, WhatsApp, or Instagram, we may collect:",
+    intro: "When you contact us through our website, WhatsApp, phone, or email, we may collect:",
     items: [
       "Your name and contact information (email, phone number)",
       "Enquiry details, preferred fish varieties, and communication preferences",

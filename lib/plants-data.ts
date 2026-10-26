@@ -7,13 +7,15 @@ export type PlantArtType =
   | "duckweed";
 
 export interface Plant {
-  id: number;
+  id: number | string;
   name: string;
   slug: string;
   scientificName?: string;
+  scientific_name?: string;
   shortDescription: string;
+  short_description?: string;
   description: string;
-  art: PlantArtType;
+  art?: PlantArtType;
   image: string;
   careInformation?: {
     lighting: string;
@@ -21,9 +23,16 @@ export interface Plant {
     difficulty: string;
     placement: string;
   };
+  care_lighting?: string;
+  care_growth?: string;
+  care_difficulty?: string;
+  care_placement?: string;
   aquariumUses?: string[];
-  isFeatured: boolean;
-  published: boolean;
+  aquarium_uses?: string[];
+  isFeatured?: boolean;
+  is_featured?: boolean;
+  published?: boolean;
+  is_published?: boolean;
 }
 
 export const plants: Plant[] = [

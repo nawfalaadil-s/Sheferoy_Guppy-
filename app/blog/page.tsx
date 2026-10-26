@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import PageHeader from "@/components/layout/PageHeader";
-import BlogClient from "@/components/blog/BlogClient";
+import BlogClient, { type UnifiedBlogPost } from "@/components/blog/BlogClient";
+import { getDbBlogPosts } from "@/lib/database-service";
+import { blogPosts } from "@/lib/blog-data";
+
+export const revalidate = 0;
 
 export const metadata: Metadata = {
   title: "The Journal — Guppy Care, Breeding & Aquarium Notes | Sheferoy Guppy",
@@ -15,7 +19,17 @@ export const metadata: Metadata = {
   },
 };
 
-export default function BlogPage() {
+export default async function BlogPage() {
+  let initialPosts: UnifiedBlogPost[] = blogPosts;
+  try {
+    const dbPosts = await getDbBlogPosts(true);
+    if (dbPosts && dbPosts.length > 0) {
+      initialPosts = dbPosts;
+    }
+  } catch {
+    initialPosts = blogPosts;
+  }
+
   return (
     <>
       <PageHeader
@@ -23,12 +37,12 @@ export default function BlogPage() {
         title={
           <>
             Notes on Guppies,{" "}
-            <span className="font-display italic text-brand">Water & Patience</span>
+            <span className="font-display italic text-brand">Water &amp; Patience</span>
           </>
         }
         description="Practical, honest guidance for ornamental fish keeping — from tank setup to breeding lines. Field knowledge directly from our Kanyakumari breeding rooms."
       />
-      <BlogClient />
+      <BlogClient initialPosts={initialPosts} />
     </>
   );
 }

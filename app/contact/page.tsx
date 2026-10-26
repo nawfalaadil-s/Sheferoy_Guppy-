@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { Instagram, MapPin, MessageCircle, Package, ShieldCheck } from "lucide-react";
+import { Mail, MapPin, MessageCircle, Package, ShieldCheck } from "lucide-react";
 import PageHeader from "@/components/layout/PageHeader";
 import ContactForm from "@/components/contact/ContactForm";
 import Reveal from "@/components/ui/Reveal";
@@ -87,24 +86,22 @@ export default function ContactPage() {
                   <div className="rounded-2xl border border-border bg-surface p-6 shadow-card hover:shadow-card-hover transition-all">
                     <div className="flex items-center gap-3.5">
                       <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-border bg-secondary text-brand shadow-sm">
-                        <Instagram className="h-5 w-5" aria-hidden="true" />
+                        <Mail className="h-5 w-5" aria-hidden="true" />
                       </span>
                       <div>
-                        <h3 className="font-display text-xl font-bold text-heading">Instagram</h3>
+                        <h3 className="font-display text-xl font-bold text-heading">Email Enquiries</h3>
                         <p className="font-sans text-[11px] font-semibold uppercase tracking-wider text-muted">
-                          Daily breeding reels & direct messages
+                          Official breeding communication
                         </p>
                       </div>
                     </div>
-                    <Link
-                      href={process.env.NEXT_PUBLIC_INSTAGRAM_URL || "https://www.instagram.com/sheferoyguppy/"}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <a
+                      href="mailto:eliteguppyss@gmail.com"
                       className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-surface py-3 text-xs font-semibold text-heading hover:border-brand hover:text-brand transition-colors"
                     >
-                      <Instagram className="h-4 w-4" aria-hidden="true" />
-                      Follow @sheferoyguppy
-                    </Link>
+                      <Mail className="h-4 w-4" aria-hidden="true" />
+                      <span>eliteguppyss@gmail.com</span>
+                    </a>
                   </div>
                 </Reveal>
 

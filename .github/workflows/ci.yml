@@ -1,0 +1,55 @@
+name: Production CI/CD & QA Suite
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+
+jobs:
+  audit-and-test:
+    name: Code Hygiene, Build & E2E Verification
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    env:
+      NEXT_PUBLIC_SITE_URL: "http://localhost:3000"
+      NEXT_PUBLIC_ADMIN_USERNAME: "admin"
+      ADMIN_PASSWORD: "test-admin-password"
+      ADMIN_SESSION_SECRET: "ci-test-session-secret-key-sheferoy-guppy-2026"
+      NODE_ENV: "test"
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: Install Project Dependencies
+        run: npm ci
+
+      - name: Code Quality & Linting
+        run: npm run lint
+
+      - name: Production Next.js Build
+        run: npm run build
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run E2E Test Suite (Chromium)
+        run: npx playwright test --project=chromium
+        env:
+          PLAYWRIGHT_TEST_BASE_URL: "http://localhost:3000"
+
+      - name: Upload Playwright Test Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 14

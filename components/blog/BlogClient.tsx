@@ -5,12 +5,29 @@ import Link from "next/link";
 import { Search, X } from "lucide-react";
 import { blogPosts, blogCategories } from "@/lib/blog-data";
 
-export default function BlogClient() {
+export interface UnifiedBlogPost {
+  id?: number;
+  title: string;
+  slug: string;
+  excerpt: string;
+  content?: string;
+  category: string;
+  author?: string;
+  publishedAt?: string;
+  published_at?: string;
+  published?: boolean;
+  is_published?: boolean;
+  readTime?: string;
+  read_time?: string;
+}
+
+export default function BlogClient({ initialPosts }: { initialPosts?: UnifiedBlogPost[] }) {
+  const allPosts = initialPosts && initialPosts.length > 0 ? initialPosts : blogPosts;
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
 
   const filteredPosts = useMemo(() => {
-    let filtered = blogPosts.filter((p) => p.published);
+    let filtered = allPosts.filter((p) => p.published !== false && p.is_published !== false);
 
     if (selectedCategory !== "All Categories") {
       filtered = filtered.filter((p) => p.category === selectedCategory);
@@ -27,9 +44,11 @@ export default function BlogClient() {
     }
 
     return filtered.sort(
-      (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+      (a, b) =>
+        new Date(b.published_at || b.publishedAt || 0).getTime() -
+        new Date(a.published_at || a.publishedAt || 0).getTime()
     );
-  }, [searchQuery, selectedCategory]);
+  }, [searchQuery, selectedCategory, allPosts]);
 
   return (
     <>
@@ -133,15 +152,15 @@ export default function BlogClient() {
                     </p>
                   </div>
                   <div className="flex items-center gap-4 lg:col-span-4 lg:justify-end text-xs text-muted">
-                    <time dateTime={post.publishedAt}>
-                      {new Date(post.publishedAt).toLocaleDateString("en-IN", {
+                    <time dateTime={post.published_at || post.publishedAt || ""}>
+                      {new Date(post.published_at || post.publishedAt || Date.now()).toLocaleDateString("en-IN", {
                         day: "numeric",
                         month: "short",
                         year: "numeric",
                       })}
                     </time>
                     <span>·</span>
-                    <span>{post.readTime}</span>
+                    <span>{post.read_time || post.readTime || "5 min read"}</span>
                   </div>
                 </article>
               ))}

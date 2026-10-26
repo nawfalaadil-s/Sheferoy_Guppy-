@@ -10,8 +10,11 @@ export interface BlogPost {
   category: string;
   author: string;
   publishedAt: string;
+  published_at?: string;
   published: boolean;
+  is_published?: boolean;
   readTime: string;
+  read_time?: string;
 }
 
 export const blogCategories = [

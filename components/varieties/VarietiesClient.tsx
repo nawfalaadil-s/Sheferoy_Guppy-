@@ -7,7 +7,8 @@ import { useSearchParams } from "next/navigation";
 import { Search, X, MessageCircle } from "lucide-react";
 import { guppyVarieties, categories, type Variety } from "@/lib/varieties-data";
 
-export default function VarietiesClient() {
+export default function VarietiesClient({ initialVarieties }: { initialVarieties?: Variety[] }) {
+  const allVarieties = initialVarieties && initialVarieties.length > 0 ? initialVarieties : guppyVarieties;
   const searchParams = useSearchParams();
   const urlCategory = searchParams.get("category");
 
@@ -21,7 +22,7 @@ export default function VarietiesClient() {
   }, [urlCategory]);
 
   const filteredVarieties = useMemo(() => {
-    let filtered = guppyVarieties.filter((v) => v.published);
+    let filtered = allVarieties.filter((v) => v.published !== false);
 
     if (selectedCategory !== "All") {
       filtered = filtered.filter((v) => v.category === selectedCategory);
@@ -38,7 +39,7 @@ export default function VarietiesClient() {
     }
 
     return filtered;
-  }, [searchQuery, selectedCategory]);
+  }, [searchQuery, selectedCategory, allVarieties]);
 
   const clearFilters = () => {
     setSearchQuery("");
