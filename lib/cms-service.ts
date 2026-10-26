@@ -103,14 +103,14 @@ export async function saveHomepageContent(
 
     if (error) {
       console.error("Supabase upsert site_content error:", error);
-      // Still consider success if written locally
-      return { success: true };
+      return { success: false, error: error.message };
     }
 
     return { success: true };
   } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : "Failed to save homepage content";
     console.error("saveHomepageContent error:", err);
-    return { success: true };
+    return { success: false, error: message };
   }
 }
 

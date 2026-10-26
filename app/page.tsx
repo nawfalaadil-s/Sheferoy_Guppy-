@@ -6,6 +6,7 @@ import SeoContentSection from "@/components/home/SeoContentSection";
 import ContactCTA from "@/components/home/ContactCTA";
 import { getHomepageContent } from "@/lib/cms-service";
 
+export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export const metadata: Metadata = {

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import {
   getHomepageContent,
   saveHomepageContent,
@@ -29,7 +30,22 @@ export async function PUT(request: Request) {
       );
     }
 
-    await saveHomepageContent(body as HomepageContent);
+    const result = await saveHomepageContent(body as HomepageContent);
+    if (!result.success) {
+      return NextResponse.json(
+        { success: false, error: result.error || "Failed to update CMS content" },
+        { status: 500 }
+      );
+    }
+
+    // Force purge homepage cache
+    try {
+      revalidatePath("/");
+      revalidatePath("/", "layout");
+    } catch (e) {
+      console.warn("revalidatePath error:", e);
+    }
+
     return NextResponse.json({ success: true, message: "Homepage content updated successfully" });
   } catch (error) {
     console.error("PUT /api/cms error:", error);
@@ -45,6 +61,12 @@ export async function POST(request: Request) {
     const body = await request.json().catch(() => ({}));
     if (body.action === "reset") {
       await resetHomepageContent();
+      try {
+        revalidatePath("/");
+        revalidatePath("/", "layout");
+      } catch (e) {
+        console.warn("revalidatePath error:", e);
+      }
       const content = await getHomepageContent();
       return NextResponse.json({
         success: true,

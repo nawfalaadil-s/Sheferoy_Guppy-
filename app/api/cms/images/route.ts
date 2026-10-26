@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
+import { supabase } from "@/lib/supabase";
 
 export async function GET() {
   try {
@@ -27,6 +28,31 @@ export async function GET() {
           }
         }
       }
+    }
+
+    // Also fetch items uploaded to Supabase Storage cms-images bucket if available
+    try {
+      const { data: storageFiles } = await supabase.storage.from("cms-images").list("", {
+        limit: 100,
+        sortBy: { column: "created_at", order: "desc" },
+      });
+
+      if (storageFiles && storageFiles.length > 0) {
+        for (const sf of storageFiles) {
+          if (sf.name && !sf.name.startsWith(".")) {
+            const { data: pub } = supabase.storage.from("cms-images").getPublicUrl(sf.name);
+            if (pub?.publicUrl) {
+              images.unshift({
+                path: pub.publicUrl,
+                name: sf.name.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " "),
+                category: "Uploaded Images",
+              });
+            }
+          }
+        }
+      }
+    } catch {
+      // Continue with local files
     }
 
     return NextResponse.json({ success: true, images });
@@ -67,16 +93,47 @@ export async function POST(request: Request) {
       .replace(/[^a-z0-9.-]/g, "_")
       .slice(0, 50);
     const fileName = `${Date.now()}_${safeName}`;
-    const uploadDir = path.join(process.cwd(), "public", "images", "uploads");
 
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
+    let publicUrl = "";
+
+    // 1. Primary: Upload to Supabase Storage 'cms-images' bucket
+    try {
+      const { data: uploadData, error: uploadErr } = await supabase.storage
+        .from("cms-images")
+        .upload(fileName, buffer, {
+          contentType: file.type,
+          upsert: true,
+        });
+
+      if (!uploadErr && uploadData) {
+        const { data: pub } = supabase.storage.from("cms-images").getPublicUrl(fileName);
+        if (pub?.publicUrl) {
+          publicUrl = pub.publicUrl;
+        }
+      }
+    } catch (e) {
+      console.warn("Supabase storage upload error:", e);
     }
 
-    const filePath = path.join(uploadDir, fileName);
-    fs.writeFileSync(filePath, buffer);
+    // 2. Secondary: Local public folder write (for dev environment)
+    try {
+      const uploadDir = path.join(process.cwd(), "public", "images", "uploads");
+      if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+      }
+      const filePath = path.join(uploadDir, fileName);
+      fs.writeFileSync(filePath, buffer);
+      if (!publicUrl) {
+        publicUrl = `/images/uploads/${fileName}`;
+      }
+    } catch {
+      // Ephemeral serverless container on Netlify/Vercel
+    }
 
-    const publicUrl = `/images/uploads/${fileName}`;
+    // 3. Fallback: Base64 Data URL if storage was unreachable
+    if (!publicUrl) {
+      publicUrl = `data:${file.type};base64,${buffer.toString("base64")}`;
+    }
 
     return NextResponse.json({
       success: true,
