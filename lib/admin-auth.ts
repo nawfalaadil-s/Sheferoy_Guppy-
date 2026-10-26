@@ -8,12 +8,28 @@ export function getAdminCredentials() {
   };
 }
 
+/**
+ * Constant-time string equality check to completely defeat timing side-channel attacks.
+ */
+export function timingSafeCompare(a: string, b: string): boolean {
+  const enc = new TextEncoder();
+  const aBuf = enc.encode(a);
+  const bBuf = enc.encode(b);
+  if (aBuf.byteLength !== bBuf.byteLength) {
+    return false;
+  }
+  let diff = 0;
+  for (let i = 0; i < aBuf.byteLength; i++) {
+    diff |= aBuf[i] ^ bBuf[i];
+  }
+  return diff === 0;
+}
+
 export function validateAdminCredentials(user: string, pass: string): boolean {
   const creds = getAdminCredentials();
-  return (
-    user.trim().toLowerCase() === creds.username.trim().toLowerCase() &&
-    pass.trim() === creds.password.trim()
-  );
+  const userValid = timingSafeCompare(user.trim().toLowerCase(), creds.username.trim().toLowerCase());
+  const passValid = timingSafeCompare(pass.trim(), creds.password.trim());
+  return userValid && passValid;
 }
 
 /**
